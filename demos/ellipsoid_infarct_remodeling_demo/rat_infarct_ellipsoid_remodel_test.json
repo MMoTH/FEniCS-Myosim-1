@@ -102,19 +102,13 @@
 "electrophys_parameters": {
 
   "cell_ion_parameters": {
-    "model": ["three_state_calcium"],
+    "model": ["two_compartment"],
     "model_inputs": {
-      "basals
-      l_ca": [0.0],
-      "active_ca": [0.0],
-      "t_act": [0.0],
-      "initial_calcium": [0.0, "Molar"],
-      "path_to_calcium": ["/home/fenics/shared/working_directory_untracked/amir_test14_printedfiles/test_14/calcium.npy"]
+      "Ca_content": [1e-3,"Molar"],
+      "k_leak": [0.008000800080008],
+      "k_act": [1.4472186384349266],
+      "k_serca": [80.0]
     }
-  },
-
-  "monodomain_parameters": {
-    "dummy_param2": [0.0]
   }
 },
   "windkessel_parameters": {
