@@ -7,12 +7,12 @@
 
 from __future__ import division
 import sys
-sys.path.append("/mnt/home/f0101140/Desktop/FEniCS-Myosim/dependencies/")
-sys.path.append("/mnt/home/f0101140/Desktop/FEniCS-Myosim/source_code/")
+sys.path.append("/home/mme250/FEniCS-Myosim-1/dependencies/")
+sys.path.append("/home/mme250/FEniCS-Myosim-1/source_code/")
 #sys.path.append("/home/fenics/shared/dependencies/")
 #sys.path.append("/home/fenics/shared/source_code/")
-sys.path.append("/home/ckma224/FEniCS-Myosim/dependencies/")
-sys.path.append("/home/ckma224/FEniCS-Myosim/source_code/")
+sys.path.append("/home/mme250/FEniCS-Myosim-1/dependencies/")
+sys.path.append("/home/mme250/FEniCS-Myosim-1/source_code/")
 import os as os
 from dolfin import *
 import numpy as np
