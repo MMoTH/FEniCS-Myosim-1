@@ -3,7 +3,8 @@
     "simulation_geometry": ["ellipsoid"],
     "rseed": [0],
     "geometry_options": {
-      "mesh_path": ["/home/mme250/FEniCS-Myosim-1/meshes/ellipsoidal_refined_deg2.hdf5"]
+      "mesh_path": ["/home/mme250/FEniCS-Myosim-1/meshes/ellipsoidal_refined_deg2.hdf5"],
+      "scaled": ["False"]
     },
     "protocol": {
       "simulation_type": ["cycle"],
@@ -15,6 +16,7 @@
     "save_cell_output": [0],
     "save_visual_output": [1],
     "save_solution": [1],
+    "load_solution": ["/home/mme250/FEniCS-Myosim-1/output_mohammad/forleading/"],
     "output_path": ["/home/mme250/FEniCS-Myosim-1/output_mohammad/rat_ellipsoid_infarct_remodel/"],
     "fiber_orientation":{
       "fiber_randomness": [0]
