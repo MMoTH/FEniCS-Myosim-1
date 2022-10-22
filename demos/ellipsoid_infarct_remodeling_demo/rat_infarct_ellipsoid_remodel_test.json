@@ -19,7 +19,8 @@
     "load_solution": [0,"/home/mme250/FEniCS-Myosim-1/output_mohammad/forleading/"],
     "output_path": ["/home/mme250/FEniCS-Myosim-1/output_mohammad/rat_ellipsoid_infarct_remodel/"],
     "fiber_orientation":{
-      "fiber_randomness": [0]
+      "fiber_randomness": [0],
+      "load_fibers": [0]
     }
   },
 
