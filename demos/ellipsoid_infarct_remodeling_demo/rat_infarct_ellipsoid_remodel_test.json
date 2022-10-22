@@ -3,7 +3,7 @@
     "simulation_geometry": ["ellipsoid"],
     "rseed": [0],
     "geometry_options": {
-      "mesh_path": ["/home/mme250/FEniCS-Myosim-1/meshes/ellipsoid_degree_2/ellipsoidal/ellipsoid_degree_2.hdf5"],
+      "mesh_path": ["/home/mme250/FEniCS-Myosim-1/meshes/ellipsoid_degree_2/ellipsoidal/ellipsoidal_degree_2.hdf5"],
       "scaled": ["False"]
     },
     "protocol": {
