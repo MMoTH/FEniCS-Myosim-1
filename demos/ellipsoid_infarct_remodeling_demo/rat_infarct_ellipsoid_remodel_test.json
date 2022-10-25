@@ -104,7 +104,7 @@
 "electrophys_parameters": {
 
   "cell_ion_parameters": {
-    "model": ["two_compartment"],
+    "model": ["two_compartment_demo"],
     "model_inputs": {
       "Ca_content": [1e-3,"Molar"],
       "k_leak": [0.008000800080008],
