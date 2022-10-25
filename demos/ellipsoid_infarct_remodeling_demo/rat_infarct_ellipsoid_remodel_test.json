@@ -8,8 +8,8 @@
     },
     "protocol": {
       "simulation_type": ["cycle"],
-      "simulation_duration": [850, "ms"],
-      "simulation_timestep": [0.1, "ms"],
+      "simulation_duration": [2, "ms"],
+      "simulation_timestep": [0.01, "ms"],
       "initial_end_diastolic_volume": [0.24],
       "reference_loading_steps": [10]
     },
@@ -104,12 +104,13 @@
 "electrophys_parameters": {
 
   "cell_ion_parameters": {
-    "model": ["two_compartment_demo"],
+    "model": ["three_state_calcium"],
     "model_inputs": {
-      "Ca_content": [1e-3,"Molar"],
-      "k_leak": [0.008000800080008],
-      "k_act": [1.4472186384349266],
-      "k_serca": [80.0]
+      "basal_ca": [0.0],
+      "active_ca": [0.0],
+      "t_act": [0.0],
+      "initial_calcium": [0.0, "Molar"],
+      "path_to_calcium": ["/home/mme250/FEniCS-Myosim-1/dependencies/cell_ion_module/three_state_calcium.py"]
     }
   }
 },
