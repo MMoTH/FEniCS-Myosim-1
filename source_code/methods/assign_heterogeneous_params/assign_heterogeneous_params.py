@@ -276,10 +276,10 @@ def iterate_dolfin_keys(dolfin_functions,het_dolfin_dict):
 def assign_dolfin_functions(dolfin_functions,het_dolfin_dict,no_of_int_points,no_of_cells,geo_options):
 
     for k in het_dolfin_dict.keys():
-        #print "het_dolfin_dict"
-        #print k
-        #print "assigning functions"
-        #print het_dolfin_dict
+        print "het_dolfin_dict"
+        print k
+        print "assigning functions"
+        print het_dolfin_dict
         #print k
         base_value = het_dolfin_dict[k][0]
         hetero_law = het_dolfin_dict[k][1]

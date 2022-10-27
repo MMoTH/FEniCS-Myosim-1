@@ -45,7 +45,7 @@
 
     "passive_law_parameters": {
       "passive_law": ["semi_structural"],
-      "c": [200, {"heterogeneous":"True","law":"percent_fibrosis","percent":10,"scaling_factor":20,"material_properties":"isotropic"}],
+      "c": [200, {"heterogeneous":"True","law":"percent_fibrosis","percent":10,"material_properties":"isotropic"}],
       "c2": [250],
       "c3": [15.0],
       "bf": [8.0],
