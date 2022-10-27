@@ -352,13 +352,16 @@ def scalar_fibrosis_law(hs_params_list,base_value,k,percent,scaling_factor,no_of
 
 def df_fibrosis_law(dolfin_functions,base_value,k,percent,scaling_factor,mat_prop,no_of_cells):
 
-    sample_indices = r.choice(no_of_cells,int(percent*no_of_cells), replace=False)
-    print "sample indices"
-    print sample_indices
+
     print "no_of_cells"
     print no_of_cells
     print "int(percent*no_of_cells)"
     print int(percent*no_of_cells)
+
+    sample_indices = r.choice(no_of_cells,int(percent*no_of_cells), replace=False)
+    print "sample indices"
+    print sample_indices
+   
 
 
     for jj in np.arange(no_of_cells):
