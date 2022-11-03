@@ -1,6 +1,7 @@
 from dolfin import *
 import numpy as np
 import numpy.random as r
+import math
 
 
 ## define heterogeneous parameters based on some rule
@@ -18,7 +19,7 @@ def assign_heterogeneous_params(sim_params,hs_params_template,hs_params_list,dol
     het_hs_dict = iterate_hs_keys(hs_params_template,het_hs_dict)
 
     # assign heterogeneous parameters based on the desired law
-    hs_params_list = assign_hs_values(het_hs_dict,hs_params_list,no_of_int_points,geo_options) #geo_options will contain information for specific spatial variations
+    #hs_params_list = assign_hs_values(het_hs_dict,hs_params_list,no_of_int_points,geo_options) #geo_options will contain information for specific spatial variations
 
     # create empty dictionary to hold keys for heterogeneous dolfin functions
     het_dolfin_dict = {}
@@ -358,7 +359,13 @@ def df_fibrosis_law(dolfin_functions,base_value,k,percent,scaling_factor,mat_pro
     print "int(percent*no_of_cells)"
     print int(percent*no_of_cells)
 
-    sample_indices = r.choice(no_of_cells,int(percent*no_of_cells), replace=False)
+   # sample_indices = r.choice(no_of_cells,int(percent*no_of_cells), replace=False)
+    
+    step = int(no_of_cells/(percent*no_of_cells))   # it stimately would follow the percenage
+    sample_indices = np.arange(1,no_of_cells,step)    # this can give better unified disarray
+
+    print "step"
+    print step
     print "sample indices"
     print sample_indices
    
