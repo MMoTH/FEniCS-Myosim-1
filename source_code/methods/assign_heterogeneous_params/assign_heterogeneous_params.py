@@ -19,7 +19,7 @@ def assign_heterogeneous_params(sim_params,hs_params_template,hs_params_list,dol
     het_hs_dict = iterate_hs_keys(hs_params_template,het_hs_dict)
 
     # assign heterogeneous parameters based on the desired law
-    #hs_params_list = assign_hs_values(het_hs_dict,hs_params_list,no_of_int_points,geo_options) #geo_options will contain information for specific spatial variations
+    hs_params_list = assign_hs_values(het_hs_dict,hs_params_list,no_of_int_points,geo_options) #geo_options will contain information for specific spatial variations
 
     # create empty dictionary to hold keys for heterogeneous dolfin functions
     het_dolfin_dict = {}
