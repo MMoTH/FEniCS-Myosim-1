@@ -1,7 +1,7 @@
 from dolfin import *
 import numpy as np
 import numpy.random as r
-import math
+
 
 
 ## define heterogeneous parameters based on some rule
