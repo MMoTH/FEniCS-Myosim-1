@@ -367,6 +367,7 @@ def df_fibrosis_law(dolfin_functions,base_value,k,percent,scaling_factor,mat_pro
     sample_indices = np.arange(1,no_of_cells,step)    # this can give better unified disarray
 
     print "step"
+    
     print step
     print "sample indices"
     print sample_indices
