@@ -347,7 +347,9 @@ def scalar_fibrosis_law(hs_params_list,base_value,k,percent,scaling_factor,no_of
 
         if jj in sample_indices:
 
-            hs_params_list[jj]["myofilament_parameters"][k][0] == base_value*scaling_factor
+            #hs_params_list[jj]["myofilament_parameters"][k][0] == base_value*scaling_factor
+            hs_params_list[jj]["myofilament_parameters"][k][0] == base_value   # here I want to avoid hyper contractility and jsut want to change stiffness
+
 
     return hs_params_list
 
@@ -361,7 +363,7 @@ def df_fibrosis_law(dolfin_functions,base_value,k,percent,scaling_factor,mat_pro
 
    # sample_indices = r.choice(no_of_cells,int(percent*no_of_cells), replace=False)
     
-    step = int(no_of_cells/(percent*no_of_cells))   # it stimately would follow the percenage
+    step = int(no_of_cells/(percent*no_of_cells)) +1  # it stimately would follow the percenage
     sample_indices = np.arange(1,no_of_cells,step)    # this can give better unified disarray
 
     print "step"
