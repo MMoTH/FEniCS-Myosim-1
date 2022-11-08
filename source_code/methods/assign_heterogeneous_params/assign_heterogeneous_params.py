@@ -2,7 +2,7 @@ from dolfin import *
 import numpy as np
 import numpy.random as r
 
-
+# MM since het params are defined in passive paremeters which are stored in dolfin functions, parts of the code with dolfin_funtions is working for het
 
 ## define heterogeneous parameters based on some rule
 def assign_heterogeneous_params(sim_params,hs_params_template,hs_params_list,dolfin_functions,geo_options,no_of_int_points,no_of_cells):
@@ -16,7 +16,7 @@ def assign_heterogeneous_params(sim_params,hs_params_template,hs_params_list,dol
     het_hs_dict = {}
 
     # fill het_hs_dict with any keys that are flagged as heterogeneous
-    het_hs_dict = iterate_hs_keys(hs_params_template,het_hs_dict)
+    het_hs_dict = iterate_hs_keys(hs_params_template,het_hs_dict)     
 
     # assign heterogeneous parameters based on the desired law
     hs_params_list = assign_hs_values(het_hs_dict,hs_params_list,no_of_int_points,geo_options) #geo_options will contain information for specific spatial variations
@@ -143,17 +143,17 @@ def assign_hs_values(het_hs_dict,hs_params_list,no_of_int_points,geo_options):
     return hs_params_list
 
 def iterate_dolfin_keys(dolfin_functions,het_dolfin_dict):
-    #print "dolfin function"
-    #print dolfin_functions
-    for k, v in dolfin_functions.items():
+    print "dolfin functions"
+    print dolfin_functions
+    for k, v in dolfin_functions.items():        #MM it iterates both key and value 
 
         if isinstance(v,dict):
-            iterate_dolfin_keys(v,het_dolfin_dict)
+            iterate_dolfin_keys(v,het_dolfin_dict)   #MM if inside dolfin function dict there is a sub dict, this loop goes through those dicts as well
 
         else:
             # got actual parameter value list, not another dictionary
             for j in v:
-                if isinstance(j,dict):
+                if isinstance(j,dict):    #MM here for value of c we have a dict, so het_dolfin_dict[c] will form
                     check = j["heterogeneous"]
                     if (check=="true") or (check=="True"):
                         #print "there is a hetero dict"
@@ -161,7 +161,7 @@ def iterate_dolfin_keys(dolfin_functions,het_dolfin_dict):
                         # this parameter should be homogeneous
                         temp_law = j["law"]
                         base_value = v[0] #first entry is base value
-                        het_dolfin_dict[k]=[base_value,temp_law]
+                        het_dolfin_dict[k]=[base_value,temp_law]    
                         #print "het_dolfin_dict"
                         #print het_dolfin_dict
                         if temp_law == "gaussian":
@@ -367,7 +367,7 @@ def df_fibrosis_law(dolfin_functions,base_value,k,percent,scaling_factor,mat_pro
     sample_indices = np.arange(1,no_of_cells,step)    # this can give better unified disarray
 
     print "step"
-    
+
     print step
     print "sample indices"
     print sample_indices

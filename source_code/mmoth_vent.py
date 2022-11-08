@@ -714,6 +714,8 @@ def fenics(sim_params):
     #heterogeneous_fcn_list,hs_params_list,passive_params_list = assign_params.assign_heterogeneous_params(sim_params,hs_params_list,passive_params_list,geo_options,heterogeneous_fcn_list,no_of_int_points)
     hs_params_list,dolfin_functions = assign_params.assign_heterogeneous_params(sim_params,hs_params,hs_params_list,dolfin_functions,geo_options,no_of_int_points,no_of_cells)
     #print "cb density"
+    print "dolfin_functions after het in mmoth"
+    print dolfin_functions
     #print dolfin_functions["passive_params"]["bt"][-1].vector().get_local()
     #print "k3"
 
