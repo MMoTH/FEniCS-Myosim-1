@@ -716,7 +716,9 @@ def fenics(sim_params):
     #print "cb density"
     print "dolfin_functions after het in mmoth"
     print dolfin_functions
-    #print dolfin_functions["passive_params"]["bt"][-1].vector().get_local()
+    
+    print "c param for LV"
+    print dolfin_functions["passive_params"]["c"][-1].vector().get_local()
     #print "k3"
 
     # Select fibers for visualization (exclude stiff regions)
