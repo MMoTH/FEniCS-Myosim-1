@@ -720,7 +720,7 @@ def fenics(sim_params):
     print "c param for LV"
 
     print len(np.array(dolfin_functions["passive_params"]["c"][-1].vector().get_local()[:]))
-     
+    print np.array(dolfin_functions["passive_params"]["c"][-1].vector().get_local()[:])
 
     #print "k3"
 
