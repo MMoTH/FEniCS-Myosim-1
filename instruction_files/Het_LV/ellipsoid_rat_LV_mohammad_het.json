@@ -9,7 +9,7 @@
     },
     "protocol": {
       "simulation_type": ["cycle"],
-      "simulation_duration": [0.4, "ms"],
+      "simulation_duration": [1400, "ms"],
       "simulation_timestep": [0.2, "ms"],
       "initial_end_diastolic_volume": [0.24],
       "reference_loading_steps": [30]
