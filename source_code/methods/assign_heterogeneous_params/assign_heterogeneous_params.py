@@ -399,6 +399,8 @@ def df_fibrosis_law(dolfin_functions,base_value,k,percent,scaling_factor,mat_pro
                 else:
                     dolfin_functions["passive_params"][k][-1].vector()[jj] = base_value*scaling_factor
 
+    #print dolfin_functions["passive_params"]["c"][-1].vector().get_local()[0:20]
+
     return dolfin_functions
 
 def scalar_fiber_w_compliance_law(hs_params_list,base_value,k,fiber_value,no_of_int_points,geo_options):
