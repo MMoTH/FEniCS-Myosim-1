@@ -145,7 +145,7 @@ def assign_hs_values(het_hs_dict,hs_params_list,no_of_int_points,geo_options):
 def iterate_dolfin_keys(dolfin_functions,het_dolfin_dict):
     print "dolfin functions"
     print dolfin_functions
-    for k, v in dolfin_functions.items():        #MM it iterates both key and value 
+    for k, v in dolfin_functions.items():        #MM it iterates both key and value . for example here for het in c, it only iterates into c dict since it is only defiend in instruction
 
         if isinstance(v,dict):
             iterate_dolfin_keys(v,het_dolfin_dict)   #MM if inside dolfin function dict there is a sub dict, this loop goes through those dicts as well
@@ -361,10 +361,10 @@ def df_fibrosis_law(dolfin_functions,base_value,k,percent,scaling_factor,mat_pro
     print "int(percent*no_of_cells)"
     print int(percent*no_of_cells)
 
-   # sample_indices = r.choice(no_of_cells,int(percent*no_of_cells), replace=False)
+    sample_indices = r.choice(no_of_cells,int(percent*no_of_cells), replace=False)
     
     step = int(no_of_cells/(percent*no_of_cells)) +1  # it stimately would follow the percenage
-    sample_indices = np.arange(1,no_of_cells,step)    # this can give better unified disarray
+    #sample_indices = np.arange(1,no_of_cells,step)    # this can give better unified disarray
 
     print "step"
 
