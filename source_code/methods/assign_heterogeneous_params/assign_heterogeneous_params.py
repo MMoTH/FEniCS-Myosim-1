@@ -366,7 +366,7 @@ def df_fibrosis_law(dolfin_functions,base_value,k,percent,scaling_factor,mat_pro
     step = int(no_of_cells/(percent*no_of_cells)) +1  # it stimately would follow the percenage
     #sample_indices = np.arange(1,no_of_cells,step)    # this can give better unified disarray
 
-    sample_indices = np.arange(1,10)
+    sample_indices = np.arange(900,1000)
     print "step"
 
     print step
