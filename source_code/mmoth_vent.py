@@ -718,7 +718,7 @@ def fenics(sim_params):
     print dolfin_functions
     
     print "c param for LV"
-    print dolfin_functions["passive_params"]["c"][-1].vector().get_local()
+    print dolfin_functions["passive_params"]["c"][-1].vector().get_local[1:10]
     #print "k3"
 
     # Select fibers for visualization (exclude stiff regions)
