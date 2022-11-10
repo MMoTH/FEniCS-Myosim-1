@@ -2,7 +2,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import sys
 import numpy as np
-plt.style.use('seaborn-bright')
+#plt.style.use('seaborn')
 
 pv_file_input = sys.argv[1]
 time, LV_pressure, arterial_pressure, venous_pressure, LV_vol, ven_vol, art_vol = np.loadtxt(pv_file_input, skiprows=0, unpack=True, usecols=(0,1,2,3,4,5,6))
