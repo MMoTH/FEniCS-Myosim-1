@@ -36,7 +36,7 @@ from mpl_toolkits.mplot3d import Axes3D
 #--------------------------------------------------------------------------------
 # Load inputs:
 base_dir = 'C:/Users/mme250.AD/OneDrive - University of Kentucky/Cluster_models/'
-sim_dir = 'Het_model/het/'
+sim_dir = 'Het_model/Final_300kr/no_het_kr300/'
 
 f0_vs_time = np.load(base_dir + sim_dir + 'f0_vs_time.npy')
 quadrature_dof_map = np.load(base_dir + 'quadrature_dof.npy')
@@ -83,6 +83,7 @@ region_indices = np.zeros(np.shape(quadrature_dof_map)[0])
 checksum =0
 checksum1 = 0
 checksum2 = 0
+''''
 for k in np.arange(np.shape(quadrature_dof_map)[0]):
     # Getting rid of basal points?
     if quadrature_dof_map[k][2] < -.07:
@@ -119,6 +120,8 @@ for k in np.arange(np.shape(quadrature_dof_map)[0]):
                 checksum2+=1
     else:
         region_indices[k] = int(5)
+
+'''
 
 """print "number of infarct points", checksum
 print "number of border points", checksum1

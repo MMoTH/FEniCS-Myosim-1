@@ -18,7 +18,7 @@
     "save_visual_output": [1],
     "save_solution": [1],
     "load_solution": [0,"/home/mme250/FEniCS-Myosim-1/output_mohammad/forleading/"],
-    "output_path": ["/project/jfwe223_uksr/Mohammad_data/no_het2/"],
+    "output_path": ["/project/jfwe223_uksr/Mohammad_data/no_het3/"],
     "fiber_orientation":{
       "fiber_randomness": [0],
       "load_fibers":[0.0]
@@ -79,7 +79,7 @@
       "k_2": [96.0, "s^-1"],
       "k_3": [750.0, "(nm^-1)(s^-1)"],
       "k_4_0": [450.864648098121948, "s^-1"],
-      "k_4_1": [0.5, "nm^-4"],
+      "k_4_1": [0.1, "nm^-4"],
       "k_cb": [0.001, "N*m^-1"],
       "x_ps": [5.0, "nm"],
       "k_on": [5.8e7, "(M^-1)(s^-1)"],
@@ -139,7 +139,7 @@
      "fiber_reorientation":{
        "stress_type":["total"],
        "law":["new_stress_kroon"],
-       "time_constant":[300.0],
+       "time_constant":[340.0],
        "reorient_t_start":[400.0,"ms"]
      }
    }

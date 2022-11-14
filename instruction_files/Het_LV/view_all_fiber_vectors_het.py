@@ -36,7 +36,7 @@ from mpl_toolkits.mplot3d import Axes3D
 # Load inputs:
 #sim_dir = '/Users/charlesmann/Academic/UK/FEniCS-Myosim/working_directory_untracked/rat_infarct_remodeling/strain/strain_remodeling_on_t340/'
 base_dir = 'C:/Users/mme250.AD/OneDrive - University of Kentucky/Cluster_models/'
-sim_dir = 'Het_model/het_scale/'
+sim_dir = 'Het_model/Final_300kr/kr300/'
 f0_vs_time = np.load(base_dir + sim_dir + 'f0_vs_time.npy')
 quadrature_dof_map = np.load(base_dir + 'quadrature_dof.npy')
 ecc = np.load(base_dir + 'ecc.npy')
