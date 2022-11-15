@@ -10,7 +10,7 @@
     "protocol": {
       "simulation_type": ["cycle"],
       "simulation_duration": [1400, "ms"],
-      "simulation_timestep": [0.2, "ms"],
+      "simulation_timestep": [0.1, "ms"],
       "initial_end_diastolic_volume": [0.24],
       "reference_loading_steps": [30]
     },
@@ -18,7 +18,7 @@
     "save_visual_output": [1],
     "save_solution": [1],
     "load_solution": [0,"/home/mme250/FEniCS-Myosim-1/output_mohammad/forleading/"],
-    "output_path": ["/project/jfwe223_uksr/Mohammad_data/het0.3fib/"],
+    "output_path": ["/project/jfwe223_uksr/Mohammad_data/het4_0.1fib/"],
     "fiber_orientation":{
       "fiber_randomness": [0],
       "load_fibers":[0.0]
@@ -46,7 +46,7 @@
 
     "passive_law_parameters": {
       "passive_law": ["semi_structural"],
-      "c": [200, {"heterogeneous":"True","law":"percent_fibrosis","percent":0.3,"scaling_factor":15,"material_properties":"isotropic"}],
+      "c": [200, {"heterogeneous":"True","law":"percent_fibrosis","percent":0.1,"scaling_factor":15,"material_properties":"isotropic"}],
       "c2": [250],
       "c3": [15.0],
       "bf": [8.0],
@@ -79,7 +79,7 @@
       "k_2": [96.0, "s^-1"],
       "k_3": [750.0, "(nm^-1)(s^-1)"],
       "k_4_0": [450.864648098121948, "s^-1"],
-      "k_4_1": [0.1, "nm^-4"],
+      "k_4_1": [0.5, "nm^-4"],
       "k_cb": [0.001, "N*m^-1"],
       "x_ps": [5.0, "nm"],
       "k_on": [5.8e7, "(M^-1)(s^-1)"],
