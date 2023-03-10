@@ -642,7 +642,7 @@ class Forms(object):
         f0 = self.parameters["fiber"]
         f = PK2*f0/sqrt(inner(PK2*f0,PK2*f0))
 
-	f_proj = project(f,VectorFunctionSpace(mesh,"DG",1),form_compiler_parameters={"representation":"uflacs"})
+    f_proj = project(f,VectorFunctionSpace(mesh,"DG",1),form_compiler_parameters={"representation":"uflacs"})
         """for i in range(no_of_int_points):
             f_array = f_proj.vector().get_local()[i*3:(i+1)*3]
             if np.all(np.isnan(f_array)):

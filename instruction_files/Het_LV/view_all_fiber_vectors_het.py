@@ -36,7 +36,7 @@ from mpl_toolkits.mplot3d import Axes3D
 # Load inputs:
 #sim_dir = '/Users/charlesmann/Academic/UK/FEniCS-Myosim/working_directory_untracked/rat_infarct_remodeling/strain/strain_remodeling_on_t340/'
 base_dir = 'C:/Users/mme250.AD/OneDrive - University of Kentucky/Cluster_models/'
-sim_dir = 'Het_model/Final_K41/het3_0.2fib/'
+sim_dir = 'Het_model/Final_time_step0.1/not_het4/'
 f0_vs_time = np.load(base_dir + sim_dir + 'f0_vs_time.npy')
 quadrature_dof_map = np.load(base_dir + 'quadrature_dof.npy')
 ecc = np.load(base_dir + 'ecc.npy')
@@ -63,42 +63,10 @@ checksum =0
 checksum1 = 0
 checksum2 = 0
 
-for k in np.arange(np.shape(quadrature_dof_map)[0]):
-    r = np.sqrt(quadrature_dof_map[k][1]**2 + (quadrature_dof_map[k][2]+.44089)**2)
-    if quadrature_dof_map[k][0] > 0 and (r < .2044):
-        # infarct point
-        region_indices[k] = int(2)
-        checksum+=1
-    if quadrature_dof_map[k][0] > 0 and (r >= .2044):
-        if r < (0.25):
-            # border zone
-            region_indices[k] = int(1)
-            checksum1 +=1
-        if r >= 0.25:
-            if quadrature_dof_map[k][2] > (-.44089+.2044):
-                #region_indices[k] = int(5)
-                region_indices[k] = int(0)
-            elif quadrature_dof_map[k][2] <= (-.44089-.2044):
-                #region_indices[k] = int(5)
-                region_indices[k] = int(0)
-            else:
-                # free region at mid ventricle
-                region_indices[k] = int(0)
-                checksum2+=1
-    if quadrature_dof_map[k][0] <= 0:
-        if quadrature_dof_map[k][2] > (-.44089+.2044):
-            #region_indices[k] = int(5)
-            region_indices[k] = int(0)
-        elif quadrature_dof_map[k][2] < (-.44089-.2044):
-            #region_indices[k] = int(5)
-            region_indices[k] = int(0)
-        else:
-            region_indices[k] = int(0)
-            checksum2+=1
 #-------------------------------------------------------------------------------
 
 
-
+'''
 fig2 = plt.figure(figsize=(6,6))
 ax1 = fig2.add_subplot(131, projection='3d')
 ax2 = fig2.add_subplot(132, projection='3d')
@@ -122,7 +90,6 @@ for p in np.arange(np.shape(quadrature_dof_map)[0]):
         vec2plot = np.array([q[0],q[1],q[2],(q[0]+vec[0]),(q[1]+vec[1]),(q[2]+vec[2])])
         ax3.quiver(vec2plot[0],vec2plot[1],vec2plot[2],vec2plot[3],vec2plot[4],vec2plot[5],length = 0.05, color = colors[2],pivot='middle',arrow_length_ratio=0.05)
  
-
 ax1.set_xlim([-0.5,0.5])
 ax1.set_ylim([-0.5,0.5])
 ax1.set_zlim([-0.8,0.0])
@@ -135,25 +102,89 @@ ax3.set_xlim([-0.5,0.5])
 ax3.set_ylim([-0.5,0.5])
 ax3.set_zlim([-0.8,0.0])
 
+'''
 
 
 
-fig3 = plt.figure(figsize=(6,6))
+fig3 = plt.figure(figsize=(9,9))
 
-ax1 = fig3.add_subplot(111, projection='3d')
+ax1 = plt.axes(projection='3d')
+ax1.view_init(0, 0)
 
-for p in np.arange(1,5000,10): # np.arange(np.shape(quadrature_dof_map)[0]):
+for p in np.arange(np.shape(quadrature_dof_map)[0]):   
    
     vec = final_vectors[p,:]
     vec2 = initial_vectors[p,:]
     q = quadrature_dof_map[p]
      
-    if norm_dist_endo[p] > 0.9:
-        vec2plot = np.array([q[0],q[1],q[2],(q[0]+vec[0]),(q[1]+vec[1]),(q[2]+vec[2])])
-        ax1.quiver(vec2plot[0],vec2plot[1],vec2plot[2],vec2plot[3],vec2plot[4],vec2plot[5],length = 0.05, color = colors[0],pivot='middle',arrow_length_ratio=0.05)
+    if norm_dist_endo[p] > 0.97 and q[0]>0:
 
         vec2plot = np.array([q[0],q[1],q[2],(q[0]+vec2[0]),(q[1]+vec2[1]),(q[2]+vec2[2])])
-        ax1.quiver(vec2plot[0],vec2plot[1],vec2plot[2],vec2plot[3],vec2plot[4],vec2plot[5],length = 0.05, color = colors[2],pivot='middle',arrow_length_ratio=0.05)
+        ax1.quiver(vec2plot[0],vec2plot[1],vec2plot[2],vec2plot[3],vec2plot[4],vec2plot[5],length = 0.04, color = colors[2],pivot='middle',arrow_length_ratio=0.05)
+
+        vec2plot = np.array([q[0],q[1],q[2],(q[0]+vec[0]),(q[1]+vec[1]),(q[2]+vec[2])])
+        ax1.quiver(vec2plot[0],vec2plot[1],vec2plot[2],vec2plot[3],vec2plot[4],vec2plot[5],length = 0.04, color = colors[0],pivot='middle',arrow_length_ratio=0.05)
+
+
+ax1.legend(['Initial fiber',"Final fiber"])
+
+plt.show()
+
+miny = np.min(quadrature_dof_map[:][1])
+maxy = np.max(quadrature_dof_map[:][1])
+minz = np.min(quadrature_dof_map[:][2])
+maxz = np.max(quadrature_dof_map[:][2])
+
+#ax1.set_xlim3d(min / 2, RADIUS / 2)
+#ax1.set_ylim3d(miny / 3, maxy / 2)
+#ax1.set_zlim3d(minz/ 2, maxz/ 2)
+
+'''
+fig4 = plt.figure(figsize=(9,9))
+
+ax2 = plt.axes(projection='3d')
+ax2.view_init(0, 0)
+
+for p in np.arange(np.shape(quadrature_dof_map)[0]):   
+   
+    vec = final_vectors[p,:]
+    vec2 = initial_vectors[p,:]
+    q = quadrature_dof_map[p]
+     
+    if norm_dist_endo[p] > 0.97 and q[0]>0:
+
+        vec2plot = np.array([q[0],q[1],q[2],(q[0]+vec2[0]),(q[1]+vec2[1]),(q[2]+vec2[2])])
+        ax2.quiver(vec2plot[0],vec2plot[1],vec2plot[2],vec2plot[3],vec2plot[4],vec2plot[5],length = 0.04, color = colors[2],pivot='middle',arrow_length_ratio=0.05)
+
+        vec2plot = np.array([q[0],q[1],q[2],(q[0]+vec[0]),(q[1]+vec[1]),(q[2]+vec[2])])
+        ax2.quiver(vec2plot[0],vec2plot[1],vec2plot[2],vec2plot[3],vec2plot[4],vec2plot[5],length = 0.04, color = colors[0],pivot='middle',arrow_length_ratio=0.05)
+
+
+
+ax1.legend(['Initial fiber',"Final fiber"])
+
+plt.show()
+
+'''
+
+
+'''
+ax2 = fig3.add_subplot(122, projection='3d')
+
+for p in np.arange(1,5200,10):    #np.arange(np.shape(quadrature_dof_map)[0]):
+   
+    vec = final_vectors[p,:]
+    vec2 = initial_vectors[p,:]
+    q = quadrature_dof_map[p]
+     
+    if norm_dist_endo[p] < 0.1:
+        vec2plot = np.array([q[0],q[1],q[2],(q[0]+vec[0]),(q[1]+vec[1]),(q[2]+vec[2])])
+        ax2.quiver(vec2plot[0],vec2plot[1],vec2plot[2],vec2plot[3],vec2plot[4],vec2plot[5],length = 0.05, color = colors[0],pivot='middle',arrow_length_ratio=0.05)
+
+        vec2plot = np.array([q[0],q[1],q[2],(q[0]+vec2[0]),(q[1]+vec2[1]),(q[2]+vec2[2])])
+        ax2.quiver(vec2plot[0],vec2plot[1],vec2plot[2],vec2plot[3],vec2plot[4],vec2plot[5],length = 0.05, color = colors[2],pivot='middle',arrow_length_ratio=0.05)
+
+
 
 
 ax1.set_xlim([-0.5,0.5])
@@ -161,7 +192,10 @@ ax1.set_ylim([-0.5,0.5])
 ax1.set_zlim([-0.8,0.0])
 
 
+ax2.set_xlim([-0.5,0.5])
+ax2.set_ylim([-0.5,0.5])
+ax2.set_zlim([-0.8,0.0])
+'''
 
 
-plt.show()
     #ax2.scatter(q[0],q[1],q[2],zdir='z',c=colors[d['seg_number'][p].astype('int')])
