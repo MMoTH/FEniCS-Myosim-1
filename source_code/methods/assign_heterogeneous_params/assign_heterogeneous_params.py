@@ -609,9 +609,12 @@ def df_contractile_law(dolfin_functions,base_value,k,percent,width,scaling_facto
 
 def df_rat_ellipsoid_infarct(dolfin_functions,base_value,k,scaling_factor,no_of_int_points,geo_options):
     xq = geo_options["xq"] # coordinate of quadrature points
+    base_CB_density = 6.96e16
+    
     for jj in np.arange(no_of_int_points):
     
         r = np.sqrt(xq[jj][1]**2 + (xq[jj][2]+.44089)**2)
+        
 
         if xq[jj][0] > 0 and (r < .2044):
             dolfin_functions["passive_params"][k][-1].vector()[jj] = base_value*scaling_factor
@@ -626,5 +629,8 @@ def df_rat_ellipsoid_infarct(dolfin_functions,base_value,k,scaling_factor,no_of_
                 #dolfin_functions["passive_params"]["bt"][-1].vector()[jj] = 10
                 #dolfin_functions["passive_params"]["bf"][-1].vector()[jj] = 10
                 #dolfin_functions["passive_params"]["bfs"][-1].vector()[jj] = 10
-                dolfin_functions["cb_number_density"][-1].vector()[jj] = 1.513157e18*(r-.2044)    
+                dolfin_functions["cb_number_density"][-1].vector()[jj] = base_CB_density*((r-0.2044)/(0.25-0.2044)) + 0.3*base_CB_density*((0.25-r)/(0.25-0.2044))
+            
+                #1.513157e18*(r-.2044)    
+
     return dolfin_functions

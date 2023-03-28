@@ -232,6 +232,9 @@ def fenics(sim_params):
     output_file.parameters.update({"functions_share_mesh": True,
                                             "rewrite_function_mesh": False,
                                             "flush_output": True})
+    
+
+
     #output_file.parameters.update({"functions_share_mesh": True,"rewrite_function_mesh": False})
     if save_visual_output:
         # Can visualize pretty much anything. For now, just looking at deformation
@@ -719,8 +722,8 @@ def fenics(sim_params):
     
     print "c param for LV"
 
-    print len(np.array(dolfin_functions["passive_params"]["c"][-1].vector().get_local()[:]))
-    print np.array(dolfin_functions["passive_params"]["c"][-1].vector().get_local()[0:1500])
+    #print len(np.array(dolfin_functions["passive_params"]["c"][-1].vector().get_local()[:]))
+    #print np.array(dolfin_functions["passive_params"]["c"][-1].vector().get_local()[0:1500])
 
     #print "k3"
 
@@ -773,6 +776,49 @@ def fenics(sim_params):
     #File(output_path + "fiber.pvd") << project(temp_f0, VectorFunctionSpace(mesh, "DG", 0))
     #File(output_path + "sheet.pvd") << project(s0, VectorFunctionSpace(mesh, "DG", 0))
     #File(output_path + "sheet-normal.pvd") << project(n0, VectorFunctionSpace(mesh, "DG", 0))
+
+    
+    # additional saving params for fiber visual
+    scalar_elem =  FiniteElement("DG",mesh.ufl_cell(),1)
+    scalar_FS =  FunctionSpace(mesh, scalar_elem)
+    f00 = f0 ## saving initial f0 to find reorientaion in each time step
+
+    for m in ['displacement','hs_length','reorienting_angle','c_param','fiber_direction']:
+        if m == 'displacement':
+            temp_obj = W.sub(0)
+                        
+        if m == 'hs_length':
+                        
+             temp_obj = project(hsl0,scalar_FS)
+                        
+
+        #if m == 'reorienting_angle':
+             
+             ## after each time step fdiff_angle would be calculated and placed in this projection           
+             #temp_obj = project(hsl0,scalar_FS)
+
+                         
+        if m == 'c_param':
+
+            finite_element0 = FiniteElement("DG",mesh.ufl_cell(),0)
+            finite_elemet_FS0 = FunctionSpace(mesh,finite_element0)
+            temp_obj = project(dolfin_functions["passive_params"]["c"][-1],finite_elemet_FS0)
+                        #File(self.instruction_data["output_handler"]['mesh_output_path'][0] + "c_param.pvd") << project(self.mesh.model['functions']['dolfin_functions']["passive_params"]["c"][-1],FunctionSpace(self.mesh.model['mesh'],"DG",0))
+
+        if m == 'fiber_direction':
+
+                        #temp_obj = project(self.mesh.model['functions']['f0'],FunctionSpace(self.mesh.model['mesh'], "CG", 1),form_compiler_parameters={"representation":"uflacs"})
+                            
+            Velem0 = VectorElement("CG", mesh.ufl_cell(), 1, quad_scheme="default")
+            Velem0._quad_scheme = 'default'
+            Velem_FS = FunctionSpace(mesh,Velem0)
+            temp_obj = project(f0,Velem_FS)
+
+
+        temp_obj.rename(m,'')
+                    
+        output_file.write(temp_obj,0)
+    
 
 #-------------------------------------------------------------------------------
 #           Initialize the solver and forms parameters, continuum tensors
@@ -1644,6 +1690,45 @@ def fenics(sim_params):
         
         # Save visualization info
         print "SAVE VISUAL OUTPUT",save_visual_output
+
+
+        for m in ['displacement','hs_length','reorienting_angle','c_param','fiber_direction']:
+            if m == 'displacement':
+                temp_obj = W.sub(0)
+                            
+            if m == 'hs_length':
+                            
+                temp_obj = project(hsl0,scalar_FS)
+                            
+
+            #if m == 'reorienting_angle':
+                            
+                #temp_obj = project(self.mesh.model['functions']["fdiff_ang"],scalar_FS)
+
+                            
+            if m == 'c_param':
+
+                finite_element0 = FiniteElement("DG",mesh.ufl_cell(),0)
+                finite_elemet_FS0 = FunctionSpace(mesh,finite_element0)
+                temp_obj = project(dolfin_functions["passive_params"]["c"][-1],finite_elemet_FS0)
+                            #File(self.instruction_data["output_handler"]['mesh_output_path'][0] + "c_param.pvd") << project(self.mesh.model['functions']['dolfin_functions']["passive_params"]["c"][-1],FunctionSpace(self.mesh.model['mesh'],"DG",0))
+
+            if m == 'fiber_direction':
+
+                            #temp_obj = project(self.mesh.model['functions']['f0'],FunctionSpace(self.mesh.model['mesh'], "CG", 1),form_compiler_parameters={"representation":"uflacs"})
+                                
+                Velem0 = VectorElement("CG", mesh.ufl_cell(), 1, quad_scheme="default")
+                Velem0._quad_scheme = 'default'
+                Velem_FS = FunctionSpace(mesh,Velem0)
+                temp_obj = project(f0,Velem_FS)
+
+
+            temp_obj.rename(m,'')
+                        
+            output_file.write(temp_obj,0)
+        
+
+        
         
         if save_visual_output:
             print "saving visual output"

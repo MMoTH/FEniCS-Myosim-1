@@ -3,24 +3,25 @@
     "simulation_geometry": ["ellipsoid"],
     "rseed": [0],
     "geometry_options": {
-      "mesh_path": ["/mnt/home/f0101140/Desktop/FEniCS-Myosim/meshes/ellipsoidal_degree_2.hdf5"],
-      "scaled": ["False"]
+      "mesh_path": ["/home/mme250/FEniCS-Myosim-1/meshes/ellipsoidal_infarctpaper_60/ellipsoidal/ellipsoidal.hdf5"],
+      "scaled": ["False"],
+      "casename": ["ellipsoidal"]
     },
     "protocol": {
       "simulation_type": ["cycle"],
-      "simulation_duration": [1600.0, "ms"],
+      "simulation_duration": [2.0, "ms"],
       "simulation_timestep": [0.1, "ms"],
-      "initial_end_diastolic_volume": [0.25801975505],
+      "initial_end_diastolic_volume": [0.24],
       "reference_loading_steps": [30]
     },
     "save_cell_output": [0],
     "save_visual_output": [1],
     "save_solution": [1],
     "load_solution": [0, "/mnt/home/f0101140/Desktop/kurtis_output/new_ellipsoid_deg2_test_ca_cycle1/"],
-    "output_path": ["/mnt/gs18/scratch/users/f0101140/rat_infarct_sims/stress/remodeling_infarct_borderzone/"],
+    "output_path": ["/project/jfwe223_uksr/Mohammad_data/infarct/remodeling_infarct_borderzone/"],
     "fiber_orientation":{
       "fiber_randomness": [0],
-      "load_fibers": [1, "/mnt/home/f0101140/Desktop/kurtis_output/rat_infarct_paper_sims/stress/remodeling_on_t340_altered_params_baseline_pv/solution.hdf5"]
+      "load_fibers": [1, "/home/mme250/FEniCS-Myosim-1/instruction_files/MM_fiber_paper/input_fiber/solution.hdf5"]
     }
   },
 
@@ -45,7 +46,7 @@
 
     "passive_law_parameters": {
       "passive_law": ["semi_structural"],
-      "c": [200, {"heterogeneous":"True","law":"rat_ellipsoid_infarct","scaling_factor":20}],
+      "c": [180, {"heterogeneous":"True","law":"rat_ellipsoid_infarct","scaling_factor":20}],
       "c2": [250],
       "c3": [15.0],
       "bf": [8.0],
@@ -77,7 +78,7 @@
       "k_force": [2e-4, "(N^-1)(m^2)"],
       "k_2": [96.0, "s^-1"],
       "k_3": [750.0, "(nm^-1)(s^-1)"],
-      "k_4_0": [700.0, "s^-1"],
+      "k_4_0": [550.864648098121948, "s^-1"],
       "k_4_1": [0.5, "nm^-4"],
       "k_cb": [0.001, "N*m^-1"],
       "x_ps": [5.0, "nm"],
