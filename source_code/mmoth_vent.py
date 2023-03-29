@@ -82,7 +82,7 @@ def fenics(sim_params):
         save_solution_flag = sim_params["save_solution"][0]
     else:
         save_solution_flag = 0
-        output_path = sim_params["output_path"][0]
+    output_path = sim_params["output_path"][0]
     
     print "output path,",output_path
     # assign amount of random variation in f0 (cube and cylinder simulations, 0 means normal alignment)
