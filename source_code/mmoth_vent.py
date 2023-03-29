@@ -785,11 +785,11 @@ def fenics(sim_params):
     scalar_FS =  FunctionSpace(mesh, scalar_elem)
     f00 = f0 ## saving initial f0 to find reorientaion in each time step
 
-    for m in ['displacement','hs_length','reorienting_angle','c_param','fiber_direction']:
-        if m == 'displacement':
+    for nn in ['displacement','hs_length','reorienting_angle','c_param','fiber_direction']:
+        if nn == 'displacement':
             temp_obj = w.sub(0)
                         
-        if m == 'hs_length':
+        if nn == 'hs_length':
                         
              temp_obj = project(hsl0,scalar_FS)
                         
@@ -800,14 +800,14 @@ def fenics(sim_params):
              #temp_obj = project(hsl0,scalar_FS)
 
                          
-        if m == 'c_param':
+        if nn == 'c_param':
 
             finite_element0 = FiniteElement("DG",mesh.ufl_cell(),0)
             finite_elemet_FS0 = FunctionSpace(mesh,finite_element0)
             temp_obj = project(dolfin_functions["passive_params"]["c"][-1],finite_elemet_FS0)
                         #File(self.instruction_data["output_handler"]['mesh_output_path'][0] + "c_param.pvd") << project(self.mesh.model['functions']['dolfin_functions']["passive_params"]["c"][-1],FunctionSpace(self.mesh.model['mesh'],"DG",0))
 
-        if m == 'fiber_direction':
+        if nn == 'fiber_direction':
 
                         #temp_obj = project(self.mesh.model['functions']['f0'],FunctionSpace(self.mesh.model['mesh'], "CG", 1),form_compiler_parameters={"representation":"uflacs"})
                             
@@ -818,7 +818,7 @@ def fenics(sim_params):
         
 
 
-        temp_obj.rename(m,'')
+        temp_obj.rename(nn,'')
 
         print ("temp_obj")
         print (temp_obj)
@@ -1698,11 +1698,11 @@ def fenics(sim_params):
         print "SAVE VISUAL OUTPUT",save_visual_output
 
 
-        for m in ['displacement','hs_length','reorienting_angle','c_param','fiber_direction']:
-            if m == 'displacement':
+        for nn in ['displacement','hs_length','reorienting_angle','c_param','fiber_direction']:
+            if nn == 'displacement':
                 temp_obj = w.sub(0)
                             
-            if m == 'hs_length':
+            if nn == 'hs_length':
                             
                 temp_obj = project(hsl0,scalar_FS)
                             
@@ -1712,14 +1712,14 @@ def fenics(sim_params):
                 #temp_obj = project(self.mesh.model['functions']["fdiff_ang"],scalar_FS)
 
                             
-            if m == 'c_param':
+            if nn == 'c_param':
 
                 finite_element0 = FiniteElement("DG",mesh.ufl_cell(),0)
                 finite_elemet_FS0 = FunctionSpace(mesh,finite_element0)
                 temp_obj = project(dolfin_functions["passive_params"]["c"][-1],finite_elemet_FS0)
                             #File(self.instruction_data["output_handler"]['mesh_output_path'][0] + "c_param.pvd") << project(self.mesh.model['functions']['dolfin_functions']["passive_params"]["c"][-1],FunctionSpace(self.mesh.model['mesh'],"DG",0))
 
-            if m == 'fiber_direction':
+            if nn == 'fiber_direction':
 
                             #temp_obj = project(self.mesh.model['functions']['f0'],FunctionSpace(self.mesh.model['mesh'], "CG", 1),form_compiler_parameters={"representation":"uflacs"})
                                 
@@ -1729,7 +1729,7 @@ def fenics(sim_params):
                 temp_obj = project(f0,Velem_FS)
 
 
-            temp_obj.rename(m,'')
+            temp_obj.rename(nn,'')
                         
             output_file.write(temp_obj,t[l])
         
