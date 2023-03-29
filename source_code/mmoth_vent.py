@@ -787,7 +787,7 @@ def fenics(sim_params):
 
     for m in ['displacement','hs_length','reorienting_angle','c_param','fiber_direction']:
         if m == 'displacement':
-            temp_obj = W.sub(0)
+            temp_obj = w.sub(0)
                         
         if m == 'hs_length':
                         
@@ -1700,7 +1700,7 @@ def fenics(sim_params):
 
         for m in ['displacement','hs_length','reorienting_angle','c_param','fiber_direction']:
             if m == 'displacement':
-                temp_obj = W.sub(0)
+                temp_obj = w.sub(0)
                             
             if m == 'hs_length':
                             
