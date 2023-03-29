@@ -785,19 +785,24 @@ def fenics(sim_params):
     scalar_FS =  FunctionSpace(mesh, scalar_elem)
     f00 = f0 ## saving initial f0 to find reorientaion in each time step
 
-    for nn in ['displacement','hs_length','reorienting_angle','c_param','fiber_direction']:
+    for nn in ['displacement','cb_density','hs_length','reorienting_angle','c_param','c_param_smooth','fiber_direction']:
         if nn == 'displacement':
             temp_obj = w.sub(0)
                         
         if nn == 'hs_length':
                         
              temp_obj = project(hsl0,scalar_FS)
+
+
+        if nn == 'cb_density':
+                        
+             temp_obj = project(dolfin_functions["cb_number_density"][-1],scalar_FS)
                         
 
-        #if m == 'reorienting_angle':
+        if nn == 'reorienting_angle':
              
              ## after each time step fdiff_angle would be calculated and placed in this projection           
-             #temp_obj = project(hsl0,scalar_FS)
+             temp_obj = project(hsl0,scalar_FS)
 
                          
         if nn == 'c_param':
@@ -806,6 +811,14 @@ def fenics(sim_params):
             finite_elemet_FS0 = FunctionSpace(mesh,finite_element0)
             temp_obj = project(dolfin_functions["passive_params"]["c"][-1],finite_elemet_FS0)
                         #File(self.instruction_data["output_handler"]['mesh_output_path'][0] + "c_param.pvd") << project(self.mesh.model['functions']['dolfin_functions']["passive_params"]["c"][-1],FunctionSpace(self.mesh.model['mesh'],"DG",0))
+
+
+        if nn == 'c_param_smooth':
+
+            finite_element00 = FiniteElement("CG",mesh.ufl_cell(),1)
+            finite_elemet_FS00 = FunctionSpace(mesh,finite_element00)
+            temp_obj = project(dolfin_functions["passive_params"]["c"][-1],finite_elemet_FS00)
+
 
         if nn == 'fiber_direction':
 
@@ -1697,41 +1710,62 @@ def fenics(sim_params):
         # Save visualization info
         print "SAVE VISUAL OUTPUT",save_visual_output
 
-
-        for nn in ['displacement','hs_length','reorienting_angle','c_param','fiber_direction']:
-            if nn == 'displacement':
-                temp_obj = w.sub(0)
-                            
-            if nn == 'hs_length':
-                            
-                temp_obj = project(hsl0,scalar_FS)
-                            
-
-            #if m == 'reorienting_angle':
-                            
-                #temp_obj = project(self.mesh.model['functions']["fdiff_ang"],scalar_FS)
-
-                            
-            if nn == 'c_param':
-
-                finite_element0 = FiniteElement("DG",mesh.ufl_cell(),0)
-                finite_elemet_FS0 = FunctionSpace(mesh,finite_element0)
-                temp_obj = project(dolfin_functions["passive_params"]["c"][-1],finite_elemet_FS0)
-                            #File(self.instruction_data["output_handler"]['mesh_output_path'][0] + "c_param.pvd") << project(self.mesh.model['functions']['dolfin_functions']["passive_params"]["c"][-1],FunctionSpace(self.mesh.model['mesh'],"DG",0))
-
-            if nn == 'fiber_direction':
-
-                            #temp_obj = project(self.mesh.model['functions']['f0'],FunctionSpace(self.mesh.model['mesh'], "CG", 1),form_compiler_parameters={"representation":"uflacs"})
+        
+       
+        if l%2 == 0:
+         
+            for nn in ['displacement','hs_length','cb_density','reorienting_angle','c_param','c_param_smooth','fiber_direction']:
+                if nn == 'displacement':
+                    temp_obj = w.sub(0)
                                 
-                Velem0 = VectorElement("CG", mesh.ufl_cell(), 1, quad_scheme="default")
-                Velem0._quad_scheme = 'default'
-                Velem_FS = FunctionSpace(mesh,Velem0)
-                temp_obj = project(f0,Velem_FS)
+                if nn == 'hs_length':
+                                
+                    temp_obj = project(hsl0,scalar_FS)
 
 
-            temp_obj.rename(nn,'')
-                        
-            output_file.write(temp_obj,t[l])
+                if nn == 'cb_density':
+                            
+                    temp_obj = project(dolfin_functions["cb_number_density"][-1],scalar_FS)
+                            
+
+                                
+
+                if nn == 'reorienting_angle':
+
+
+                    fdiff_ang = (180/3.14159)*acos((inner(f0,f00))/(sqrt(inner(f0,f0))*sqrt(inner(f0,f00))))
+                    
+
+                                
+                    temp_obj = project(fdiff_ang,scalar_FS)
+
+                                
+                if nn == 'c_param':
+
+                    finite_element0 = FiniteElement("DG",mesh.ufl_cell(),0)
+                    finite_elemet_FS0 = FunctionSpace(mesh,finite_element0)
+                    temp_obj = project(dolfin_functions["passive_params"]["c"][-1],finite_elemet_FS0)
+                                #File(self.instruction_data["output_handler"]['mesh_output_path'][0] + "c_param.pvd") << project(self.mesh.model['functions']['dolfin_functions']["passive_params"]["c"][-1],FunctionSpace(self.mesh.model['mesh'],"DG",0))
+
+                if nn == 'c_param_smooth':
+
+                    finite_element00 = FiniteElement("CG",mesh.ufl_cell(),1)
+                    finite_elemet_FS00 = FunctionSpace(mesh,finite_element00)
+                    temp_obj = project(dolfin_functions["passive_params"]["c"][-1],finite_elemet_FS00)
+
+                if nn == 'fiber_direction':
+
+                                #temp_obj = project(self.mesh.model['functions']['f0'],FunctionSpace(self.mesh.model['mesh'], "CG", 1),form_compiler_parameters={"representation":"uflacs"})
+                                    
+                    Velem0 = VectorElement("CG", mesh.ufl_cell(), 1, quad_scheme="default")
+                    Velem0._quad_scheme = 'default'
+                    Velem_FS = FunctionSpace(mesh,Velem0)
+                    temp_obj = project(f0,Velem_FS)
+
+
+                temp_obj.rename(nn,'')
+                            
+                output_file.write(temp_obj,t[l])
         
 
         
