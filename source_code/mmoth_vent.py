@@ -11,7 +11,7 @@ sys.path.append("/home/mme250/FEniCS-Myosim-1/dependencies/")
 sys.path.append("/home/mme250/FEniCS-Myosim-1/source_code/")
 #sys.path.append("/home/fenics/shared/dependencies/")
 #sys.path.append("/home/fenics/shared/source_code/")
-sys.path.append("/home/mme250/FEniCS-Myosim-1/dependencies/")
+sys.path.append("/C/Users/mme250/OneDrive_-_University_of_Kentucky/Github/Moth_fork_Oct22/FEniCS-Myosim-1-1/dependencies")
 sys.path.append("/home/mme250/FEniCS-Myosim-1/source_code/")
 import os as os
 from dolfin import *
@@ -73,15 +73,17 @@ def fenics(sim_params):
     save_cell_output = sim_params["save_cell_output"][0] # myosim output
     save_visual_output = sim_params["save_visual_output"][0] # paraview files for visualization
     if "load_solution" in sim_params.keys():
-	load_solution = sim_params["load_solution"][0]
-	load_solution_dir = sim_params["load_solution"][1]
+        load_solution = sim_params["load_solution"][0]
+        load_solution_dir = sim_params["load_solution"][1]
     else:
-	load_solution = 0
+	    load_solution = 0
+            
     if "save_solution" in sim_params.keys():
-	save_solution_flag = sim_params["save_solution"][0]
+        save_solution_flag = sim_params["save_solution"][0]
     else:
-	save_solution_flag = 0
-    output_path = sim_params["output_path"][0]
+        save_solution_flag = 0
+        output_path = sim_params["output_path"][0]
+    
     print "output path,",output_path
     # assign amount of random variation in f0 (cube and cylinder simulations, 0 means normal alignment)
     gaussian_width = sim_params["fiber_orientation"]["fiber_randomness"][0]
@@ -817,10 +819,10 @@ def fenics(sim_params):
 
 
         temp_obj.rename(m,'')
-        
-        print("temp_obj")
-        print(temp_obj)
-                    
+
+        print ("temp_obj")
+        print (temp_obj)
+
         output_file.write(temp_obj,0)
     
 
@@ -1508,14 +1510,14 @@ def fenics(sim_params):
 
 
 
-	try:
+        try:
             solve(Ftotal == 0, w, bcs, J = Jac, form_compiler_parameters={"representation":"uflacs"},solver_parameters={"newton_solver":{"relative_tolerance":1e-8},"newton_solver":{"maximum_iterations":50},"newton_solver":{"absolute_tolerance":1e-8}})
         except:
             np.save(output_path + 'f0_vs_time.npy',f0_vs_time_array)
-	    f0_dot_x_vec = inner(f0,x_vec)
-	    f0_dot_x_vec_array = project(f0_dot_x_vec,Quad).vector().get_local()[:]
-	    angles_array = np.arccos(f0_dot_x_vec_array)
-	    np.save(output_path+"final_angles_array.npy",angles_array)
+            f0_dot_x_vec = inner(f0,x_vec)
+            f0_dot_x_vec_array = project(f0_dot_x_vec,Quad).vector().get_local()[:]
+            angles_array = np.arccos(f0_dot_x_vec_array)
+            np.save(output_path+"final_angles_array.npy",angles_array)
 
 	#print "FG"
         #print project(Fg,TF).vector().get_local()[0:9]
@@ -1603,16 +1605,16 @@ def fenics(sim_params):
                 p_f_array[ii] = 0.0
 
         # Kroon update fiber orientation?
-	"""if stress_name == "passive":
-            driver_type = PK2_passive
-        elif stress_name == "active":
-            driver_type = Pactive
-        elif stress_name == "total":
-            driver_type = PK2_passive + Pactive
-	elif stress_name == "strain":
-	    driver_type = Emat
-	if ordering_law == "strain_kroon":
-	    driver_type = Emat"""
+        """if stress_name == "passive":
+                driver_type = PK2_passive
+            elif stress_name == "active":
+                driver_type = Pactive
+            elif stress_name == "total":
+                driver_type = PK2_passive + Pactive
+        elif stress_name == "strain":
+            driver_type = Emat
+        if ordering_law == "strain_kroon":
+            driver_type = Emat"""
         #print "Kroon"
         if 'kroon_time_constant' in locals():
             if stress_name == "passive":
@@ -1629,10 +1631,10 @@ def fenics(sim_params):
                     fdiff = uflforms.stress_kroon(PK2,Quad,fiberFS,TF_kroon,float(sim_timestep),kroon_time_constant)
                 elif ordering_law == "strain_kroon":
                     fdiff = uflforms.kroon_law(fiberFS,float(sim_timestep),kroon_time_constant,binary_mask)
-		    f0.vector()[:] += fdiff.vector()[:]
+                    f0.vector()[:] += fdiff.vector()[:]
                 elif ordering_law == "new_stress_kroon":
                     fdiff = uflforms.new_stress_kroon(driver_type,fiberFS,float(sim_timestep),kroon_time_constant,binary_mask)
-		    f0.vector()[:] += fdiff.vector()[:]
+                    f0.vector()[:] += fdiff.vector()[:]
                     print "CHECKING NUMBER OF FIBER VECTORS"
                     print np.shape(f0.vector().get_local())
                     print "Fiber orientation updated"
@@ -1729,7 +1731,7 @@ def fenics(sim_params):
 
             temp_obj.rename(m,'')
                         
-            output_file.write(temp_obj,0)
+            output_file.write(temp_obj,t[l])
         
 
         
