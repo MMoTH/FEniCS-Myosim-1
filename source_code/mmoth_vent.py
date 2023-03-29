@@ -813,9 +813,13 @@ def fenics(sim_params):
             Velem0._quad_scheme = 'default'
             Velem_FS = FunctionSpace(mesh,Velem0)
             temp_obj = project(f0,Velem_FS)
+        
 
 
         temp_obj.rename(m,'')
+        
+        print("temp_obj")
+        print(temp_obj)
                     
         output_file.write(temp_obj,0)
     
