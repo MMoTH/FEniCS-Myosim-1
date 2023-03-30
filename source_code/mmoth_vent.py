@@ -507,8 +507,8 @@ def fenics(sim_params):
         s0 = Function(fiberFS)
         n0 = Function(fiberFS)
 
-
-    if load_fibers > 0:
+    ##MM this part is not needed as fiber loading already happens in assign local coord func
+    '''if load_fibers > 0:
         
         fiber_loaded = load_fib.load_fibers(load_fibers_dir)
         f0 = fiber_loaded["f0"]
@@ -517,7 +517,7 @@ def fenics(sim_params):
     else:
         f0 = Function(fiberFS)
         s0 = Function(fiberFS)
-        n0 = Function(fiberFS)
+        n0 = Function(fiberFS)'''
 
 
 
