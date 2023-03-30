@@ -81,7 +81,7 @@ def fenics(sim_params):
 
     if "fiber_orientation" in sim_params.keys():
         load_fibers = sim_params["fiber_orientation"]["load_fibers"][0]
-        load_fibers_dir = sim_params["fiber_orientation"]["load_fibers"][0]
+        load_fibers_dir = sim_params["fiber_orientation"]["load_fibers"][1]
     else:
 	    load_fibers = 0
 
