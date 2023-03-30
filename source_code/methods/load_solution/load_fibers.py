@@ -2,9 +2,9 @@ from dolfin import *
 import pandas as pd
 import numpy as np
 
-def load_fibers(load_solution_dir):
+def load_fibers(load_fibers_dir):
 
-    f = HDF5File(mpi_comm_world(),load_solution_dir + 'solution.hdf5','r')
+    f = HDF5File(mpi_comm_world(),load_fibers_dir + 'solution.hdf5','r')
 
 
     mesh = Mesh()
