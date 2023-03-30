@@ -38,6 +38,7 @@ from methods.circulatory_module import circulatory_module as cm
 from methods.update_boundary_conditions import update_boundary_conditions
 from methods.save_solution import save_solution
 from methods.load_solution import load_solution as load_sol
+from methods.load_solution import load_fibers as load_fib
 from methods.grow_mesh import grow_mesh
 import recode_dictionary
 import json
@@ -77,6 +78,14 @@ def fenics(sim_params):
         load_solution_dir = sim_params["load_solution"][1]
     else:
 	    load_solution = 0
+
+    if "fiber_orientation" in sim_params.keys():
+        load_fibers = sim_params["fiber_orientation"]["load_fibers"][0]
+        load_fibers_dir = sim_params["fiber_orientation"]["load_fibers"][0]
+    else:
+	    load_fibers = 0
+
+
             
     if "save_solution" in sim_params.keys():
         save_solution_flag = sim_params["save_solution"][0]
@@ -150,6 +159,10 @@ def fenics(sim_params):
         n_vector_indices = [[0,0], [1,1], [2,2+no_of_x_bins-1]]
     if hs_params["myofilament_parameters"]["kinetic_scheme"][0] == "4state_with_SRX" or hs_params["myofilament_parameters"]["kinetic_scheme"][0] == "new4state_with_SRX":
         n_vector_indices = [[0,0], [1,1], [2,2+no_of_x_bins-1], [(2+no_of_x_bins), (2+no_of_x_bins)+no_of_x_bins-1]]
+
+
+
+
 
     # Load in previous solution?
     if load_solution > 0:
@@ -493,6 +506,22 @@ def fenics(sim_params):
         f0 = Function(fiberFS)
         s0 = Function(fiberFS)
         n0 = Function(fiberFS)
+
+
+    if load_fibers > 0:
+        
+        fiber_loaded = load_sol.load_fib(load_fibers_dir)
+        f0 = fiber_loaded["f0"]
+        s0 = fiber_loaded["s0"]
+        n0 = fiber_loaded["n0"]
+    else:
+        f0 = Function(fiberFS)
+        s0 = Function(fiberFS)
+        n0 = Function(fiberFS)
+
+
+
+
 
     # let's figure out messing with functions with mpi
     x_dir = Function(VectorFunctionSpace(mesh,"CG",1))
