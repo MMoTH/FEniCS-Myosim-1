@@ -775,7 +775,8 @@ def fenics(sim_params):
             temp_f0.vector()[index*3+2] = 0.0"""
     #print 'no_of_int_points: ', no_of_int_points
 
-    #File(output_path + "fiber.pvd") << project(temp_f0, VectorFunctionSpace(mesh, "DG", 0))
+    temp_f0 = f0
+    File(output_path + "fiber_0.pvd") << project(temp_f0, VectorFunctionSpace(mesh, "DG", 0))
     #File(output_path + "sheet.pvd") << project(s0, VectorFunctionSpace(mesh, "DG", 0))
     #File(output_path + "sheet-normal.pvd") << project(n0, VectorFunctionSpace(mesh, "DG", 0))
 
@@ -1366,7 +1367,13 @@ def fenics(sim_params):
                     output_file.write(w.sub(0),0)
                     pk2temp = project(inner(f0,Pactive*f0),FunctionSpace(mesh,'DG',0),form_compiler_parameters={"representation":"uflacs"})
                     #pk2temp.rename("pk2_active","active_stress")
+
+
+                    pk2temp2 = project(inner(f0,Pactive*f0),FunctionSpace(mesh,'GC',1),form_compiler_parameters={"representation":"uflacs"})
+                    pk2temp2.rename("pk2_active_smooth","active_stress_smooth")
+
                     output_file.write(pk2temp,0)
+                    output_file.write(pk2temp2,0)
 
                     #active_stress_file << pk2temp
                     hsl_temp = project(hsl,FunctionSpace(mesh,'DG',0))
@@ -1576,8 +1583,14 @@ def fenics(sim_params):
             #print "SAVING PK2 ACTIVE"
             pk2temp = project(inner(f0,Pactive*f0),FunctionSpace(mesh,'DG',0),form_compiler_parameters={"representation":"uflacs"})
             pk2temp.rename("pk2_active","active_stress")
+
+            pk2temp2 = project(inner(f0,Pactive*f0),FunctionSpace(mesh,'CG',1),form_compiler_parameters={"representation":"uflacs"})
+            pk2temp2.rename("pk2_active_smooth","active_stress_smooth")
+
             #active_stress_file << pk2temp
             output_file.write(pk2temp,t[l])
+            output_file.write(pk2temp2,t[l])
+
         #print "hsl_old after solve"
         #print project(hsl_old,Quad).vector().get_local()[:]
         hsl_old.vector()[:] = project(hsl, Quad).vector().get_local()[:] # for PDE
@@ -1712,7 +1725,7 @@ def fenics(sim_params):
 
         
        
-        if l%2 == 0:
+        if l%1 == 0:
          
             for nn in ['displacement','hs_length','cb_density','reorienting_angle','c_param','c_param_smooth','fiber_direction']:
                 if nn == 'displacement':
@@ -1846,6 +1859,8 @@ def fenics(sim_params):
         if l == (no_of_time_steps-1): # at last time step
             print "LAST TIME STEP, SAVE F0_VS_TIME"
             # save full f0_vs_time
+            File(output_path + "fiber_end.pvd") << project(f0, VectorFunctionSpace(mesh, "DG", 0))
+
             if 'kroon_time_constant' in locals():
                 print "SAVING F0 VS TIME ARRAY"
                 np.save(output_path+"f0_vs_time.npy",f0_vs_time_array)
