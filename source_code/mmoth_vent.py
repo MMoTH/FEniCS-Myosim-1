@@ -510,7 +510,7 @@ def fenics(sim_params):
 
     if load_fibers > 0:
         
-        fiber_loaded = load_sol.load_fib(load_fibers_dir)
+        fiber_loaded = load_fib.load_fibers(load_fibers_dir)
         f0 = fiber_loaded["f0"]
         s0 = fiber_loaded["s0"]
         n0 = fiber_loaded["n0"]
