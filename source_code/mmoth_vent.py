@@ -1369,7 +1369,7 @@ def fenics(sim_params):
                     #pk2temp.rename("pk2_active","active_stress")
 
 
-                    pk2temp2 = project(inner(f0,Pactive*f0),FunctionSpace(mesh,'GC',1),form_compiler_parameters={"representation":"uflacs"})
+                    pk2temp2 = project(inner(f0,Pactive*f0),FunctionSpace(mesh,'CG',1),form_compiler_parameters={"representation":"uflacs"})
                     pk2temp2.rename("pk2_active_smooth","active_stress_smooth")
 
                     output_file.write(pk2temp,0)
