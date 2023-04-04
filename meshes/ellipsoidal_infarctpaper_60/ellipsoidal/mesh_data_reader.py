@@ -25,13 +25,13 @@ f = HDF5File(mpi_comm_world(), mesh_path[0], 'r')
 
 #f = HDF5File(mesh.mpi_comm(), "ellipsoidal_correct_fiber.hdf5", 'w')
 f.read(mesh,"ellipsoidal",False)
-
+gdim = mesh.geometry().dim()
 
 
 VQuadelem = VectorElement("Quadrature", mesh.ufl_cell(), degree=2, quad_scheme="default")
 VQuadelem._quad_scheme = 'default'
 
-Quadelem = FiniteElement("Quadrature", tetrahedron, degree=2, quad_scheme="default")
+Quadelem = FiniteElement("Quadrature", mesh.ufl_cell(), degree=2, quad_scheme="default")
 Quadelem._quad_scheme = 'default'
 
 
@@ -44,7 +44,7 @@ ell = dolfin.Function(fiberFS)
 err = dolfin.Function(fiberFS)
 ecc = dolfin.Function(fiberFS)
 
-endo_dist = dolfin.Function(Quad)
+norm_dist_endo = dolfin.Function(Quad)
 epi_dist = dolfin.Function(Quad)
 
 
@@ -56,6 +56,9 @@ f.read(ecc,"ellipsoidal/eC")
 #f.read(endo_dist,"ellipsoidal/endo_dist")
 ##f.read(epi_dist,"ellipsoidal/epi_dist")
 
+f.read(norm_dist_endo,"ellipsoidal/norm_dist_endo")
+
+
 
 #gdim = mesh.geometry().dim()
 #fiberFS.sub(0).dofmap().dofs()
@@ -63,20 +66,25 @@ f.read(ecc,"ellipsoidal/eC")
 
 
 
-gdim = mesh.geometry().dim()
+
 xq = Quad.tabulate_dof_coordinates().reshape((-1,gdim))
+
+'''ecc = np.reshape(ecc.vector().array(),np.shape(xq))
+err = np.reshape(err.vector().array(),np.shape(xq))
+ell = np.reshape(ell.vector().array(),np.shape(xq))'''
+
 #xq = fiberFS.tabulate_dof_coordinates()
 np.save(output_path[0] + '/quadrature_dof',xq)
-np.save(output_path[0] + '/ell',ell.vector().array())
-np.save(output_path[0] + '/err',err.vector().array())
-np.save(output_path[0] + '/ecc',ecc.vector().array())
+np.save(output_path[0] + '/ell',ell.vector().array().reshape((-1,gdim)))
+np.save(output_path[0] + '/err',err.vector().array().reshape((-1,gdim)))
+np.save(output_path[0] + '/ecc',ecc.vector().array().reshape((-1,gdim)))
 
-#np.save(output_path[0] + '/norm_dist_endo',endo_dist.vector().array())
+np.save(output_path[0] + '/norm_dist_endo',norm_dist_endo.vector().array())
 
 
 
 #print fiberFS.sub(1).dofmap().dofs()
-#print ell.vector().array()
+print (ell.vector().array().reshape((-1,gdim)))
 #print np.shape(ell.vector().array())
 #print ecc.vector().array()
 #print ("epi_dist.vector().array()")

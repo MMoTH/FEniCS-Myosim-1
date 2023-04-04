@@ -616,12 +616,21 @@ def df_rat_ellipsoid_infarct(dolfin_functions,base_value,k,scaling_factor,no_of_
         r = np.sqrt(xq[jj][1]**2 + (xq[jj][2]+.44089)**2)
         
 
+        ## infarct params are assigned based on 7 8 time stiffer myocardium calculated form stress strain plotting
         if xq[jj][0] > 0 and (r < .2044):
+            dolfin_functions["passive_params"][k][-1].vector()[jj] = 1000
+            dolfin_functions["passive_params"]["bt"][-1].vector()[jj] = 10
+            dolfin_functions["passive_params"]["bf"][-1].vector()[jj] = 30
+            dolfin_functions["passive_params"]["bfs"][-1].vector()[jj] = 3
+            dolfin_functions["cb_number_density"][-1].vector()[jj] = 0
+
+
+        '''if xq[jj][0] > 0 and (r < .2044):
             dolfin_functions["passive_params"][k][-1].vector()[jj] = base_value*scaling_factor
             dolfin_functions["passive_params"]["bt"][-1].vector()[jj] = 10
             dolfin_functions["passive_params"]["bf"][-1].vector()[jj] = 10
             dolfin_functions["passive_params"]["bfs"][-1].vector()[jj] = 10
-            dolfin_functions["cb_number_density"][-1].vector()[jj] = 0
+            dolfin_functions["cb_number_density"][-1].vector()[jj] = 0'''
 
         if xq[jj][0] > 0 and (r >= .2044):
             if r < (0.25):
