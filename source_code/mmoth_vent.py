@@ -1608,6 +1608,10 @@ def fenics(sim_params):
         # Update functions and arrays
         #print "cb f array"
         cb_f_array[:] = project(cb_force, Quad).vector().get_local()[:]
+
+
+        dumping_freq = 20
+
         if save_visual_output:
             #print "SAVING PK2 ACTIVE"
             pk2temp = project(inner(f0,Pactive*f0),FunctionSpace(mesh,'DG',0),form_compiler_parameters={"representation":"uflacs"})
@@ -1615,10 +1619,10 @@ def fenics(sim_params):
 
             pk2temp2 = project(inner(f0,Pactive*f0),FunctionSpace(mesh,'CG',1),form_compiler_parameters={"representation":"uflacs"})
             pk2temp2.rename("pk2_active_smooth","active_stress_smooth")
-
-            #active_stress_file << pk2temp
-            output_file.write(pk2temp,t[l])
-            output_file.write(pk2temp2,t[l])
+            if l%dumping_freq == 0:
+                #active_stress_file << pk2temp
+                output_file.write(pk2temp,t[l])
+                output_file.write(pk2temp2,t[l])
 
         #print "hsl_old after solve"
         #print project(hsl_old,Quad).vector().get_local()[:]
@@ -1754,7 +1758,7 @@ def fenics(sim_params):
 
         
        
-        if l%1 == 0:
+        if l%dumping_freq == 0:
          
             for nn in ['displacement','hs_length','cb_density','reorienting_angle','c_param','c_param_smooth','fiber_direction']:
                 if nn == 'displacement':
@@ -1815,7 +1819,7 @@ def fenics(sim_params):
         if save_visual_output:
             print "saving visual output"
             print "writing output file"
-            output_file.write(w.sub(0),t[l])
+            #output_file.write(w.sub(0),t[l])
             if 'kroon_time_constant' in locals():
                 f0_vs_time_temp = project(f0,fiberFS).vector().get_local()[:]
                 f0_vs_time_temp2_global = comm.gather(f0_vs_time_temp)
@@ -1849,12 +1853,13 @@ def fenics(sim_params):
             if cb_number_density != 0:
                 hsl_temp = project(hsl,FunctionSpace(mesh,'DG',0))
                 hsl_temp.rename("hsl_temp","half-sarcomere length")
-                output_file.write(hsl_temp,t[l])
+                if l%dumping_freq == 0:
+                    output_file.write(hsl_temp,t[l])
 
-            print "saving rxn force", rxn_force
+            '''print "saving rxn force", rxn_force
             np.save(output_path + "fx",rxn_force)
             np.save(output_path+"j7",j7_fluxes)
-            np.save(output_path+"j4",j4_fluxes)
+            np.save(output_path+"j4",j4_fluxes)'''
         comm.barrier()
         # Save cell info
         tic_save_cell = timeit.default_timer()

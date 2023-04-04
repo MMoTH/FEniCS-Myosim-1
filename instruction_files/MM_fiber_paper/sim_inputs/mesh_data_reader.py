@@ -53,8 +53,8 @@ f.read(ell,"ellipsoidal/eL")
 f.read(err,"ellipsoidal/eR")
 f.read(ecc,"ellipsoidal/eC")
 
-#f.read(endo_dist,"ellipsoidal/endo_dist")
-##f.read(epi_dist,"ellipsoidal/epi_dist")
+f.read(endo_dist,"ellipsoidal/endo_dist")
+f.read(epi_dist,"ellipsoidal/epi_dist")
 
 
 #gdim = mesh.geometry().dim()
@@ -71,7 +71,7 @@ np.save(output_path[0] + '/ell',ell.vector().array())
 np.save(output_path[0] + '/err',err.vector().array())
 np.save(output_path[0] + '/ecc',ecc.vector().array())
 
-#np.save(output_path[0] + '/norm_dist_endo',endo_dist.vector().array())
+np.save(output_path[0] + '/norm_dist_endo',endo_dist.vector().array())
 
 
 
