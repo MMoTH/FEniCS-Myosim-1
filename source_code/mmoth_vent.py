@@ -1779,7 +1779,7 @@ def fenics(sim_params):
                 if nn == 'reorienting_angle':
 
 
-                    fdiff_ang = (180/3.14159)*acos((inner(f0,f00))/(sqrt(inner(f0,f0))*sqrt(inner(f0,f00))))
+                    fdiff_ang = (180/3.14159)*acos((inner(f0,f00))/(sqrt(inner(f0,f0))*sqrt(inner(f00,f00))))
                     
 
                                 
