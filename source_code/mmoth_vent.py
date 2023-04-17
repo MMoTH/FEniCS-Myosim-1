@@ -1648,7 +1648,7 @@ def fenics(sim_params):
 
             pk2_pass_temp = project(inner(f0,(PK2_passive)*f0),FunctionSpace(mesh,'DG',0),form_compiler_parameters={"representation":"uflacs"})
             pk2_pass_temp.rename("pk2_pass_DG0","")
-            output_file.write(pk2_pass_temp,0)
+            
 
             if l%dumping_freq == 0:
                 #active_stress_file << pk2temp
