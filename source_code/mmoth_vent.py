@@ -815,7 +815,7 @@ def fenics(sim_params):
     scalar_FS =  FunctionSpace(mesh, scalar_elem)
     f00 = f0 ## saving initial f0 to find reorientaion in each time step
 
-    for nn in ['displacement','cb_density','hs_length','reorienting_angle','c_param','c_param_smooth','fiber_direction']:
+    for nn in ['displacement','cb_density','hs_length','reorienting_angle','c_param','c_param_smooth','fiber_direction','Pk2_total_stress']:
         if nn == 'displacement':
             temp_obj = w.sub(0)
                         
@@ -831,8 +831,11 @@ def fenics(sim_params):
 
         if nn == 'reorienting_angle':
              
-             ## after each time step fdiff_angle would be calculated and placed in this projection           
-             temp_obj = project(hsl0,scalar_FS)
+             ## after each time step fdiff_angle would be calculated and placed in this projection  
+            fdiff_ang= Function(Quad)     
+
+
+            temp_obj = project(fdiff_ang,scalar_FS)
 
                          
         if nn == 'c_param':
@@ -859,6 +862,12 @@ def fenics(sim_params):
             Velem_FS = FunctionSpace(mesh,Velem0)
             temp_obj = project(f0,Velem_FS)
         
+        '''if nn == 'Pk2_total_stress':
+
+            finite_element_pk2 = FiniteElement("DG",mesh.ufl_cell(),0)
+            FS_pk2 = FunctionSpace(mesh,finite_element_pk2)
+            temp_obj = project(PK2_passive + Pactive,FS_pk2)'''
+
 
 
         temp_obj.rename(nn,'')
@@ -1393,20 +1402,33 @@ def fenics(sim_params):
                 if save_visual_output:
                     print "SAVING VISUAL OUTPUT"
                     #displacement_file << w.sub(0)
-                    output_file.write(w.sub(0),0)
+                    #output_file.write(w.sub(0),0)
                     pk2temp = project(inner(f0,Pactive*f0),FunctionSpace(mesh,'DG',0),form_compiler_parameters={"representation":"uflacs"})
-                    #pk2temp.rename("pk2_active","active_stress")
-
-
-                    pk2temp2 = project(inner(f0,Pactive*f0),FunctionSpace(mesh,'CG',1),form_compiler_parameters={"representation":"uflacs"})
-                    pk2temp2.rename("pk2_active_smooth","active_stress_smooth")
-
+                    pk2temp.rename("pk2_active","")
                     output_file.write(pk2temp,0)
-                    output_file.write(pk2temp2,0)
+
+
+                    pk2_pass_temp = project(inner(f0,(PK2_passive)*f0),FunctionSpace(mesh,'DG',0),form_compiler_parameters={"representation":"uflacs"})
+                    pk2_pass_temp.rename("pk2_pass_DG0","")
+                    output_file.write(pk2_pass_temp,0)
+
+                    pk2_tot_temp = project(inner(f0,(Pactive+PK2_passive)*f0),FunctionSpace(mesh,'DG',0),form_compiler_parameters={"representation":"uflacs"})
+                    pk2_tot_temp2 = project(inner(f0,(Pactive+PK2_passive)*f0),FunctionSpace(mesh,'CG',1),form_compiler_parameters={"representation":"uflacs"})
+                    pk2_tot_temp.rename("pk2_total_DG0","")
+                    pk2_tot_temp2.rename("pk2_total_CG1","")
+                    output_file.write(pk2_tot_temp,0)
+                    output_file.write(pk2_tot_temp2,0)
+
+                    shearfs_temp = project(inner(s0,(PK2_passive +Pactive)*f0),FunctionSpace(mesh,"DG",0),form_compiler_parameters={"representation":"uflacs"})
+                    shearfn_temp = project(inner(n0,(PK2_passive+Pactive)*f0),FunctionSpace(mesh,"DG",0),form_compiler_parameters={"representation":"uflacs"})
+                    shearfn_temp.rename('shearfn_total','')
+                    shearfs_temp.rename('shearfs_total','')
+                    output_file.write(shearfs_temp,0)
+                    output_file.write(shearfn_temp,0)
 
                     #active_stress_file << pk2temp
                     hsl_temp = project(hsl,FunctionSpace(mesh,'DG',0))
-                    hsl_temp.rename("hsl_temp","half-sarcomere length")
+                    hsl_temp.rename("half-sarcomere length","")
                     #hsl_file << hsl_temp
                     output_file.write(hsl_temp,0)
                     #pk2_save = project(PK2_passive,TensorFunctionSpace(mesh,"DG",0),form_compiler_parameters={"representation": "uflacs"})
@@ -1615,14 +1637,25 @@ def fenics(sim_params):
         if save_visual_output:
             #print "SAVING PK2 ACTIVE"
             pk2temp = project(inner(f0,Pactive*f0),FunctionSpace(mesh,'DG',0),form_compiler_parameters={"representation":"uflacs"})
-            pk2temp.rename("pk2_active","active_stress")
+            pk2temp.rename("pk2_active_DG0","")
 
-            pk2temp2 = project(inner(f0,Pactive*f0),FunctionSpace(mesh,'CG',1),form_compiler_parameters={"representation":"uflacs"})
-            pk2temp2.rename("pk2_active_smooth","active_stress_smooth")
+
+
+            pk2_tot_temp = project(inner(f0,(Pactive+PK2_passive)*f0),FunctionSpace(mesh,'DG',0),form_compiler_parameters={"representation":"uflacs"})
+            pk2_tot_temp2 = project(inner(f0,(Pactive+PK2_passive)*f0),FunctionSpace(mesh,'CG',1),form_compiler_parameters={"representation":"uflacs"})
+            pk2_tot_temp.rename("pk2_total_DG0","")
+            pk2_tot_temp2.rename("pk2_total_CG1","")
+
+            pk2_pass_temp = project(inner(f0,(PK2_passive)*f0),FunctionSpace(mesh,'DG',0),form_compiler_parameters={"representation":"uflacs"})
+            pk2_pass_temp.rename("pk2_pass_DG0","")
+            output_file.write(pk2_pass_temp,0)
+
             if l%dumping_freq == 0:
                 #active_stress_file << pk2temp
                 output_file.write(pk2temp,t[l])
-                output_file.write(pk2temp2,t[l])
+                output_file.write(pk2_tot_temp,t[l])
+                output_file.write(pk2_tot_temp2,t[l])
+                output_file.write(pk2_pass_temp,t[l])
 
         #print "hsl_old after solve"
         #print project(hsl_old,Quad).vector().get_local()[:]
@@ -1778,11 +1811,27 @@ def fenics(sim_params):
 
                 if nn == 'reorienting_angle':
 
+                    l_f0 = f0.vector().get_local()[:] 
+                    l_f00 = f00.vector().get_local()[:] 
+                    l_fdiff_ang = fdiff_ang.vector().get_local()[:]    
 
-                    fdiff_ang = (180/3.14159)*acos((inner(f0,f00))/(sqrt(inner(f0,f0))*sqrt(inner(f00,f00))))
+                    for ii in np.arange(no_of_int_points):
                     
+                        l_f0_holder = l_f0[ii*3:ii*3+3]
+                        l_f00_holder = l_f00[ii*3:ii*3+3]
+                        cos = (np.inner(l_f0_holder,l_f00_holder))/(np.sqrt(np.inner(l_f0_holder,l_f0_holder))*np.sqrt(np.inner(l_f00_holder,l_f00_holder)))
+                        cos = np.clip(cos, -1, 1)  #MM here avoids values abouve 1 cause nan results
+                        rad = np.arccos(cos) 
+                        theta = math.degrees(rad)
+                        l_fdiff_ang[ii] = theta
+                    
+                    fdiff_ang.vector()[:] = l_fdiff_ang
 
-                                
+
+
+
+                    #fdiff_ang = (180/3.14159)*acos((inner(f0,f00))/(sqrt(inner(f0,f0))*sqrt(inner(f00,f00))))
+                           
                     temp_obj = project(fdiff_ang,scalar_FS)
 
                                 
@@ -1823,15 +1872,19 @@ def fenics(sim_params):
             if 'kroon_time_constant' in locals():
                 f0_vs_time_temp = project(f0,fiberFS).vector().get_local()[:]
                 f0_vs_time_temp2_global = comm.gather(f0_vs_time_temp)
-                shearfs_temp = project(inner(s0,(PK2_passive +Pactive)*f0),FunctionSpace(mesh,"DG",1),form_compiler_parameters={"representation":"uflacs"})
+                shearfs_temp = project(inner(s0,(PK2_passive +Pactive)*f0),FunctionSpace(mesh,"DG",0),form_compiler_parameters={"representation":"uflacs"})
                 shearfs_quad = interpolate(shearfs_temp,Quad)
                 #shearfs_temp.rename("shearfs_temp","shear fs")
                 #output_file.write(shearfs_temp,t[l])
-                shearfn_temp = project(inner(n0,(PK2_passive+Pactive)*f0),FunctionSpace(mesh,"DG",1),form_compiler_parameters={"representation":"uflacs"})
+                shearfn_temp = project(inner(n0,(PK2_passive+Pactive)*f0),FunctionSpace(mesh,"DG",0),form_compiler_parameters={"representation":"uflacs"})
                 #shearfn_temp.rename("shearfn_temp","shear fn")
                 shearfn_quad = interpolate(shearfn_temp,Quad)
-                #output_file.write(shearfn_temp,t[l])
+                shearfn_temp.rename('shearfn_total','')
+                shearfs_temp.rename('shearfs_total','')
 
+                if l%dumping_freq == 0:
+                    output_file.write(shearfn_temp,t[l])
+                    output_file.write(shearfs_temp,t[l])
                 #shearfs_active = project(dot(s0,(Pactive)*f0),Quad).vector().get_local()[:]
                 #shearfs_passive = project(dot(s0,PK2_passive*f0),Quad).vector().get_local()[:]
                 #shearfs_local = shearfs_active + shearfs_passive
