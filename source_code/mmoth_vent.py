@@ -833,9 +833,11 @@ def fenics(sim_params):
              
              ## after each time step fdiff_angle would be calculated and placed in this projection  
             fdiff_ang= Function(Quad)     
+            
+            finite_element_R0 = FiniteElement("DG",mesh.ufl_cell(),0)
+            finite_elemet_R00 = FunctionSpace(mesh,finite_element_R0)
 
-
-            temp_obj = project(fdiff_ang,scalar_FS)
+            temp_obj = project(fdiff_ang,finite_elemet_R00)
 
                          
         if nn == 'c_param':
@@ -1828,11 +1830,14 @@ def fenics(sim_params):
                     fdiff_ang.vector()[:] = l_fdiff_ang
 
 
+                    finite_element_R0 = FiniteElement("DG",mesh.ufl_cell(),0)
+                    finite_elemet_R00 = FunctionSpace(mesh,finite_element_R0)
 
+                    temp_obj = project(fdiff_ang,finite_elemet_R00)
 
                     #fdiff_ang = (180/3.14159)*acos((inner(f0,f00))/(sqrt(inner(f0,f0))*sqrt(inner(f00,f00))))
                            
-                    temp_obj = project(fdiff_ang,scalar_FS)
+                    
 
                                 
                 if nn == 'c_param':
