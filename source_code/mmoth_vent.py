@@ -1830,7 +1830,7 @@ def fenics(sim_params):
                     fdiff_ang.vector()[:] = l_fdiff_ang
 
 
-                    finite_element_R0 = FiniteElement("DG",mesh.ufl_cell(),0)
+                    finite_element_R0 = FiniteElement("DG",mesh.ufl_cell(),1)
                     finite_elemet_R00 = FunctionSpace(mesh,finite_element_R0)
 
                     temp_obj = project(fdiff_ang,finite_elemet_R00)
