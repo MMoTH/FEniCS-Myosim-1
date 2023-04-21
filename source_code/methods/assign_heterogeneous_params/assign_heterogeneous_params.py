@@ -619,25 +619,25 @@ def df_rat_ellipsoid_infarct(dolfin_functions,base_value,k,scaling_factor,no_of_
 
 
     ## large Infarc with size based on holmes
-    #centerZ = .44089 -.07
-    #R_inf =  0.27   
-    #R_tot = 0.32
+    centerZ = .44089 -.07
+    R_inf =  0.27   
+    R_tot = 0.32
 
 
     ## Apical Infarct with size based on holmes - sphere center mid wall
-    centerZ = (-0.798 -0.663)/2  # negative since there is negative in formula
-    R_inf =  0.27   
-    R_tot = 0.32
+    #centerZ = (-0.798 -0.663)/2  # negative since there is negative in formula
+    #R_inf =  0.27   
+    #R_tot = 0.32
     
     for jj in np.arange(no_of_int_points):
     
         ### cylindrical formula for mid wall
 
-        #r = np.sqrt(xq[jj][1]**2 + (xq[jj][2]+centerZ)**2)
+        r = np.sqrt(xq[jj][1]**2 + (xq[jj][2]+centerZ)**2)
         
 
         ### apical infarct with spherical formula
-        r = np.sqrt(xq[jj][0]**2+ xq[jj][1]**2 + (xq[jj][2]-centerZ)**2)
+        #r = np.sqrt(xq[jj][0]**2+ xq[jj][1]**2 + (xq[jj][2]-centerZ)**2)
 
 
         ## infarct params are assigned based on 7 8 time stiffer myocardium calculated form stress strain plotting
@@ -649,18 +649,18 @@ def df_rat_ellipsoid_infarct(dolfin_functions,base_value,k,scaling_factor,no_of_
             dolfin_functions["cb_number_density"][-1].vector()[jj] = 0
 '''
 
-        #if xq[jj][0] > 0 and (r < R_inf):
+        if xq[jj][0] > 0 and (r < R_inf):
         # for apical
-        if (r < R_inf):   
+        #if (r < R_inf):   
             dolfin_functions["passive_params"][k][-1].vector()[jj] = base_value*scaling_factor
             dolfin_functions["passive_params"]["bt"][-1].vector()[jj] = 8
             dolfin_functions["passive_params"]["bf"][-1].vector()[jj] = 10
             dolfin_functions["passive_params"]["bfs"][-1].vector()[jj] = 10
             dolfin_functions["cb_number_density"][-1].vector()[jj] = 0
 
-        #if xq[jj][0] > 0 and (r >= R_inf):
+        if xq[jj][0] > 0 and (r >= R_inf):
         # for apical
-        if  (r >= R_inf):    
+        #if  (r >= R_inf):    
             if r < (R_tot):
                 #dolfin_functions["passive_params"][k][-1].vector()[jj] = base_value*scaling_factor
                 #dolfin_functions["passive_params"]["bt"][-1].vector()[jj] = 10

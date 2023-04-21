@@ -268,6 +268,7 @@ def fenics(sim_params):
         #fibrotc_fiber_file = File(output_path + "fibrotic_f0.pvd")
         # set up f0 vs time array
         f0_vs_time_array = np.zeros((no_of_int_points,3,no_of_time_steps))
+        P_vs_time_array = np.zeros((no_of_int_points,3,no_of_time_steps))
         shearfs_vs_time_array = np.zeros((no_of_int_points,no_of_time_steps))
         shearfn_vs_time_array = np.zeros((no_of_int_points,no_of_time_steps)) 
         #print "shape of f0 vs time",np.shape(f0_vs_time_array)
@@ -863,6 +864,9 @@ def fenics(sim_params):
             Velem0._quad_scheme = 'default'
             Velem_FS = FunctionSpace(mesh,Velem0)
             temp_obj = project(f0,Velem_FS)
+
+
+
         
         '''if nn == 'Pk2_total_stress':
 
@@ -1427,6 +1431,18 @@ def fenics(sim_params):
                     shearfs_temp.rename('shearfs_total','')
                     output_file.write(shearfs_temp,0)
                     output_file.write(shearfn_temp,0)
+                    
+                    
+                    P_total = Pactive+PK2_passive
+                    traction_total = P_total*f0/sqrt(inner(P_total*f0,P_total*f0))
+                    Velem0 = VectorElement("CG", mesh.ufl_cell(), 1, quad_scheme="default")
+                    Velem0._quad_scheme = 'default'
+                    Velem_FS = FunctionSpace(mesh,Velem0)
+                    traction_temp = project(traction_total,Velem_FS)
+                    traction_temp.rename('Total_traction','')
+                    output_file.write(traction_temp,0)
+
+
 
                     #active_stress_file << pk2temp
                     hsl_temp = project(hsl,FunctionSpace(mesh,'DG',0))
@@ -1652,12 +1668,19 @@ def fenics(sim_params):
             pk2_pass_temp.rename("pk2_pass_DG0","")
             
 
+            P_total = Pactive+PK2_passive
+            traction_total = P_total*f0/sqrt(inner(P_total*f0,P_total*f0))
+            traction_temp = project(traction_total,Velem_FS)
+            traction_temp.rename('Total_traction','')
+            
+
             if l%dumping_freq == 0:
                 #active_stress_file << pk2temp
                 output_file.write(pk2temp,t[l])
                 output_file.write(pk2_tot_temp,t[l])
                 output_file.write(pk2_tot_temp2,t[l])
                 output_file.write(pk2_pass_temp,t[l])
+                output_file.write(traction_temp,t[l])  
 
         #print "hsl_old after solve"
         #print project(hsl_old,Quad).vector().get_local()[:]
@@ -1795,7 +1818,7 @@ def fenics(sim_params):
        
         if l%dumping_freq == 0:
          
-            for nn in ['displacement','hs_length','cb_density','reorienting_angle','c_param','c_param_smooth','fiber_direction']:
+            for nn in ['displacement','hs_length','cb_density','reorienting_angle','c_param','c_param_smooth','fiber_direction','traction_vector']:
                 if nn == 'displacement':
                     temp_obj = w.sub(0)
                                 
@@ -1863,6 +1886,16 @@ def fenics(sim_params):
                     temp_obj = project(f0,Velem_FS)
 
 
+                if nn == 'traction_vector':
+
+                                    
+                    #Velem0 = VectorElement("CG", mesh.ufl_cell(), 1, quad_scheme="default")
+                    #Velem0._quad_scheme = 'default'
+                    #Velem_FS = FunctionSpace(mesh,Velem0)
+                    temp_obj = project(f0,Velem_FS)
+                    
+
+
                 temp_obj.rename(nn,'')
                             
                 output_file.write(temp_obj,t[l])
@@ -1879,6 +1912,10 @@ def fenics(sim_params):
                 f0_vs_time_temp2_global = comm.gather(f0_vs_time_temp)
                 shearfs_temp = project(inner(s0,(PK2_passive +Pactive)*f0),FunctionSpace(mesh,"DG",0),form_compiler_parameters={"representation":"uflacs"})
                 shearfs_quad = interpolate(shearfs_temp,Quad)
+
+                P_vs_time_temp = project(traction_total,fiberFS).vector().get_local()[:]
+                P_vs_time_temp2_global = comm.gather(P_vs_time_temp)
+
                 #shearfs_temp.rename("shearfs_temp","shear fs")
                 #output_file.write(shearfs_temp,t[l])
                 shearfn_temp = project(inner(n0,(PK2_passive+Pactive)*f0),FunctionSpace(mesh,"DG",0),form_compiler_parameters={"representation":"uflacs"})
@@ -1904,6 +1941,14 @@ def fenics(sim_params):
                     f0_vs_time_temp2_global = np.concatenate(f0_vs_time_temp2_global).ravel()
                     f0_vs_time_temp2_global = np.reshape(f0_vs_time_temp2_global,(no_of_int_points,3))
                     f0_vs_time_array[:,:,l] = f0_vs_time_temp2_global
+
+
+                    P_vs_time_temp2_global = np.concatenate(P_vs_time_temp2_global).ravel()
+                    P_vs_time_temp2_global = np.reshape(P_vs_time_temp2_global,(no_of_int_points,3))
+                    P_vs_time_array[:,:,l] = P_vs_time_temp2_global
+
+
+
                     shearfs_vs_time_array[:,l] = shearfs_quad.vector().get_local()[:]
                     shearfn_vs_time_array[:,l] = shearfn_quad.vector().get_local()[:]
 
@@ -1956,6 +2001,7 @@ def fenics(sim_params):
             if 'kroon_time_constant' in locals():
                 print "SAVING F0 VS TIME ARRAY"
                 np.save(output_path+"f0_vs_time.npy",f0_vs_time_array)
+                np.save(output_path+"P_vs_time.npy",P_vs_time_array)
                 
                 np.save(output_path+"shearfs.npy",shearfs_vs_time_array)
                 np.save(output_path+"shearfn.npy",shearfn_vs_time_array)
