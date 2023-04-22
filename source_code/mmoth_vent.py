@@ -1435,8 +1435,9 @@ def fenics(sim_params):
                     output_file.write(shearfs_temp,0)
                     output_file.write(shearfn_temp,0)
                     
+                    print ("check T save")
                     
-                    P_total = Pactive+PK2_passive
+                    P_total = (PK2_passive +Pactive)
                     traction_total = P_total*f0/sqrt(inner(P_total*f0,P_total*f0))
                     Velem0 = VectorElement("CG", mesh.ufl_cell(), 1, quad_scheme="default")
                     Velem0._quad_scheme = 'default'
@@ -1445,6 +1446,7 @@ def fenics(sim_params):
                     traction_temp.rename('Total_traction','')
                     output_file.write(traction_temp,0)
 
+                    print ("check T save2")
 
 
                     #active_stress_file << pk2temp
@@ -1821,7 +1823,7 @@ def fenics(sim_params):
        
         if l%dumping_freq == 0:
          
-            for nn in ['displacement','hs_length','cb_density','reorienting_angle','c_param','c_param_smooth','fiber_direction','traction_vector']:
+            for nn in ['displacement','hs_length','cb_density','reorienting_angle','c_param','c_param_smooth','fiber_direction']:
                 if nn == 'displacement':
                     temp_obj = w.sub(0)
                                 
@@ -1889,17 +1891,7 @@ def fenics(sim_params):
                     Velem0._quad_scheme = 'default'
                     Velem_FS = FunctionSpace(mesh,Velem0)
                     temp_obj = project(f0,Velem_FS)
-
-
-                if nn == 'traction_vector':
-
-                                    
-                    #Velem0 = VectorElement("CG", mesh.ufl_cell(), 1, quad_scheme="default")
-                    #Velem0._quad_scheme = 'default'
-                    #Velem_FS = FunctionSpace(mesh,Velem0)
-                    temp_obj = project(f0,Velem_FS)
                     
-
 
                 temp_obj.rename(nn,'')
                             
