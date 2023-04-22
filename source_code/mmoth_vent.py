@@ -827,7 +827,10 @@ def fenics(sim_params):
 
         if nn == 'cb_density':
                         
-             temp_obj = project(dolfin_functions["cb_number_density"][-1],scalar_FS)
+            finite_element_R0 = FiniteElement("DG",mesh.ufl_cell(),0)
+            finite_elemet_R00 = FunctionSpace(mesh,finite_element_R0)
+
+            temp_obj = project(dolfin_functions["cb_number_density"][-1],finite_elemet_R00)
                         
 
         if nn == 'reorienting_angle':
@@ -1828,8 +1831,10 @@ def fenics(sim_params):
 
 
                 if nn == 'cb_density':
-                            
-                    temp_obj = project(dolfin_functions["cb_number_density"][-1],scalar_FS)
+
+                    finite_element0 = FiniteElement("DG",mesh.ufl_cell(),0)
+                    finite_elemet_FS0 = FunctionSpace(mesh,finite_element0)       
+                    temp_obj = project(dolfin_functions["cb_number_density"][-1],finite_elemet_FS0)
                             
 
                                 
