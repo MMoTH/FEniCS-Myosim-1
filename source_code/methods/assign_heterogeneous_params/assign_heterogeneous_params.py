@@ -613,15 +613,16 @@ def df_rat_ellipsoid_infarct(dolfin_functions,base_value,k,scaling_factor,no_of_
     
     ## small Infarc with size from Kurtis model
     #centerZ = .44089
-    #R_inf =  0.2044   
-    #R_tot = 0.25
+    centerZ = .3   ## shift up the infart to get away form apex
+    R_inf =  0.2   
+    R_tot = 0.25
 
 
 
     ## large Infarc with size based on holmes
-    centerZ = .44089 -.07
-    R_inf =  0.27   
-    R_tot = 0.32
+    #centerZ = .44089 -.07
+    #R_inf =  0.27   
+    #R_tot = 0.32
 
 
     ## Apical Infarct with size based on holmes - sphere center mid wall
