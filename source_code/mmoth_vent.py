@@ -1439,10 +1439,7 @@ def fenics(sim_params):
                     
                     P_total = (PK2_passive +Pactive)
                     traction_total = P_total*f0/sqrt(inner(P_total*f0,P_total*f0))
-                    Velem0 = VectorElement("CG", mesh.ufl_cell(), 1, quad_scheme="default")
-                    Velem0._quad_scheme = 'default'
-                    Velem_FS = FunctionSpace(mesh,Velem0)
-                    traction_temp = project(traction_total,Velem_FS)
+                    traction_temp = project(traction_total,VectorFunctionSpace(mesh,"DG",1),form_compiler_parameters={"representation":"uflacs"})
                     traction_temp.rename('Total_traction','')
                     output_file.write(traction_temp,0)
 
@@ -1671,13 +1668,13 @@ def fenics(sim_params):
 
             pk2_pass_temp = project(inner(f0,(PK2_passive)*f0),FunctionSpace(mesh,'DG',0),form_compiler_parameters={"representation":"uflacs"})
             pk2_pass_temp.rename("pk2_pass_DG0","")
-            
+        
 
-            P_total = Pactive+PK2_passive
+            P_total = (PK2_passive +Pactive)
             traction_total = P_total*f0/sqrt(inner(P_total*f0,P_total*f0))
-            traction_temp = project(traction_total,Velem_FS)
+            traction_temp = project(traction_total,VectorFunctionSpace(mesh,"DG",1),form_compiler_parameters={"representation":"uflacs"})
             traction_temp.rename('Total_traction','')
-            
+                    
 
             if l%dumping_freq == 0:
                 #active_stress_file << pk2temp
