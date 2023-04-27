@@ -816,6 +816,8 @@ def fenics(sim_params):
     scalar_FS =  FunctionSpace(mesh, scalar_elem)
     f00 = f0 ## saving initial f0 to find reorientaion in each time step
 
+    l_f00 = f00.vector().get_local()[:] 
+
     for nn in ['displacement','cb_density','hs_length','reorienting_angle','c_param','c_param_smooth','fiber_direction','Pk2_total_stress']:
         if nn == 'displacement':
             temp_obj = w.sub(0)
@@ -1841,7 +1843,7 @@ def fenics(sim_params):
                 if nn == 'reorienting_angle':
 
                     l_f0 = f0.vector().get_local()[:] 
-                    l_f00 = f00.vector().get_local()[:] 
+                    #l_f00 = f00.vector().get_local()[:]   ## useing f0 befor time loop does not keep the inital f0. f00 is also changeing
                     l_fdiff_ang = fdiff_ang.vector().get_local()[:]    
 
                     for ii in np.arange(no_of_int_points):
