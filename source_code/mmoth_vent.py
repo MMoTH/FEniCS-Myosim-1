@@ -1914,6 +1914,8 @@ def fenics(sim_params):
                 shearfs_temp = project(inner(s0,(PK2_passive +Pactive)*f0),FunctionSpace(mesh,"DG",0),form_compiler_parameters={"representation":"uflacs"})
                 shearfs_quad = interpolate(shearfs_temp,Quad)
                 print('check2')
+                
+                traction_total = project(traction_total,VectorFunctionSpace(mesh,"DG",1),form_compiler_parameters={"representation":"uflacs"})
                 P_vs_time_temp = project(traction_total,fiberFS).vector().get_local()[:]
                 P_vs_time_temp2_global = comm.gather(P_vs_time_temp)
                 print('check3')
