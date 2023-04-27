@@ -1853,6 +1853,12 @@ def fenics(sim_params):
                         rad = np.arccos(cos) 
                         theta = math.degrees(rad)
                         l_fdiff_ang[ii] = theta
+                        if ii > (no_of_int_points-6):
+                            print ('l_f0_holder',l_f0_holder)
+                            print ('l_f00_holder',l_f00_holder)
+                            print ('cos',cos)
+                            print ('rad',rad)
+                            print ('theta',theta)
                     
                     fdiff_ang.vector()[:] = l_fdiff_ang
 
@@ -1904,12 +1910,13 @@ def fenics(sim_params):
             if 'kroon_time_constant' in locals():
                 f0_vs_time_temp = project(f0,fiberFS).vector().get_local()[:]
                 f0_vs_time_temp2_global = comm.gather(f0_vs_time_temp)
+                print('check1')
                 shearfs_temp = project(inner(s0,(PK2_passive +Pactive)*f0),FunctionSpace(mesh,"DG",0),form_compiler_parameters={"representation":"uflacs"})
                 shearfs_quad = interpolate(shearfs_temp,Quad)
-
+                print('check2')
                 P_vs_time_temp = project(traction_total,fiberFS).vector().get_local()[:]
                 P_vs_time_temp2_global = comm.gather(P_vs_time_temp)
-
+                print('check3')
                 #shearfs_temp.rename("shearfs_temp","shear fs")
                 #output_file.write(shearfs_temp,t[l])
                 shearfn_temp = project(inner(n0,(PK2_passive+Pactive)*f0),FunctionSpace(mesh,"DG",0),form_compiler_parameters={"representation":"uflacs"})
@@ -1936,17 +1943,18 @@ def fenics(sim_params):
                     f0_vs_time_temp2_global = np.reshape(f0_vs_time_temp2_global,(no_of_int_points,3))
                     f0_vs_time_array[:,:,l] = f0_vs_time_temp2_global
 
-
+                    print('check4')
                     P_vs_time_temp2_global = np.concatenate(P_vs_time_temp2_global).ravel()
                     P_vs_time_temp2_global = np.reshape(P_vs_time_temp2_global,(no_of_int_points,3))
                     P_vs_time_array[:,:,l] = P_vs_time_temp2_global
-
+                    print('check5')
 
 
                     shearfs_vs_time_array[:,l] = shearfs_quad.vector().get_local()[:]
                     shearfn_vs_time_array[:,l] = shearfn_quad.vector().get_local()[:]
 
-                    
+                    print('check6')
+
             if cb_number_density != 0:
                 hsl_temp = project(hsl,FunctionSpace(mesh,'DG',0))
                 hsl_temp.rename("hsl_temp","half-sarcomere length")
