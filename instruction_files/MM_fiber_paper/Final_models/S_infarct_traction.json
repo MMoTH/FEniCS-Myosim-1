@@ -141,7 +141,7 @@
        "stress_type":["total"],
        "law":["new_stress_kroon"],
        "time_constant":[340.0],
-       "reorient_t_start":[0,"ms"]
+       "reorient_t_start":[400,"ms"]
      }
    }
 
