@@ -178,6 +178,33 @@ def fenics(sim_params):
         subdomains = MeshFunction('int', mesh, 3)
     File(output_path + '/test_mesh_import.pvd') << mesh
 
+
+
+    #### extracting additaional mesh params for post processing_ hard coded
+    mesh_path = geo_options["mesh_path"][0]
+    f = HDF5File(mpi_comm_world(), mesh_path, 'r')
+    f.read(mesh,"ellipsoidal",False)
+    VQuadelem = VectorElement("Quadrature", mesh.ufl_cell(), degree=2, quad_scheme="default")
+    VQuadelem._quad_scheme = 'default'
+    Quadelem = FiniteElement("Quadrature", tetrahedron, degree=2, quad_scheme="default")
+    Quadelem._quad_scheme = 'default'
+    fiberFS = FunctionSpace(mesh, VQuadelem)
+    Quad = FunctionSpace(mesh, Quadelem)
+
+    ell = dolfin.Function(fiberFS)
+    err = dolfin.Function(fiberFS)
+    ecc = dolfin.Function(fiberFS)
+    endo_dist = dolfin.Function(Quad)
+    epi_dist = dolfin.Function(Quad)
+
+    f.read(ell,"ellipsoidal/eL")
+    f.read(err,"ellipsoidal/eR")
+    f.read(ecc,"ellipsoidal/eC")
+    f.read(endo_dist,"ellipsoidal/endo_dist")
+    f.read(epi_dist,"ellipsoidal/epi_dist")
+    f.close()
+
+
     # define communicator, for running with multiple cores in parallel
     #comm = mesh.mpi_comm()
     comm = MPI.COMM_WORLD
@@ -818,7 +845,10 @@ def fenics(sim_params):
 
     l_f00 = f00.vector().get_local()[:] 
 
-    for nn in ['displacement','cb_density','hs_length','reorienting_angle','c_param','c_param_smooth','fiber_direction','Pk2_total_stress']:
+    for nn in ['displacement','cb_density','hs_length','reorienting_angle','c_param','c_param_smooth','fiber_direction','Pk2_total_stress',
+               'endo_distance','err','ecc','ell','TA','HA']:
+        
+
         if nn == 'displacement':
             temp_obj = w.sub(0)
                         
@@ -869,6 +899,48 @@ def fenics(sim_params):
             Velem0._quad_scheme = 'default'
             Velem_FS = FunctionSpace(mesh,Velem0)
             temp_obj = project(f0,Velem_FS)
+
+
+            
+        if nn == 'endo_distance':
+
+            temp_obj =  project(endo_dist,finite_elemet_FS0)
+
+
+        if nn == 'err':
+
+            temp_obj =  project(err,Velem_FS)
+
+        if nn == 'ecc':
+
+            temp_obj =  project(ecc,Velem_FS)
+
+        if nn == 'ell':
+
+            temp_obj =  project(ell,Velem_FS)
+
+        if nn == 'TA':
+
+
+            temp = np.einsum('ij,ij->i',f0,ell.vector().array())
+            temp2 = np.einsum('ij,ij->i',f0,ecc.vector().array())
+            temp3 = np.einsum('ij,ij->i',f0,err.vector().array())
+            TA = (180/np.pi)*np.abs(np.arctan(temp3/temp2))
+            temp_obj =  project(TA,finite_elemet_FS0)
+
+
+            
+        if nn == 'HA':
+
+
+            temp = np.einsum('ij,ij->i',f0,ell.vector().array())
+            temp2 = np.einsum('ij,ij->i',f0,ecc.vector().array())
+            temp3 = np.einsum('ij,ij->i',f0,err.vector().array())
+            HA = (180/np.pi)*np.abs(np.arctan(temp/temp2))
+            temp_obj =  project(HA,finite_elemet_FS0)
+                
+                 
+
 
 
 
@@ -1896,11 +1968,46 @@ def fenics(sim_params):
                     Velem0._quad_scheme = 'default'
                     Velem_FS = FunctionSpace(mesh,Velem0)
                     temp_obj = project(f0,Velem_FS)
+
+                        
+                if nn == 'endo_distance':
+
+                    temp_obj =  project(endo_dist,finite_elemet_FS0)
+
+                if nn == 'err':
+
+                    temp_obj =  project(err,Velem_FS)
+
+                if nn == 'ecc':
+
+                    temp_obj =  project(ecc,Velem_FS)
+
+                if nn == 'ell':
+
+                    temp_obj =  project(ell,Velem_FS)
+
+                if nn == 'TA':
+
+                    temp = np.einsum('ij,ij->i',f0,ell.vector().array())
+                    temp2 = np.einsum('ij,ij->i',f0,ecc.vector().array())
+                    temp3 = np.einsum('ij,ij->i',f0,err.vector().array())
+                    TA = (180/np.pi)*np.abs(np.arctan(temp3/temp2))
+                    temp_obj =  project(TA,finite_elemet_FS0)
+
+                if nn == 'HA':
+                    temp = np.einsum('ij,ij->i',f0,ell.vector().array())
+                    temp2 = np.einsum('ij,ij->i',f0,ecc.vector().array())
+                    temp3 = np.einsum('ij,ij->i',f0,err.vector().array())
+                    HA = (180/np.pi)*np.abs(np.arctan(temp/temp2))
+                    temp_obj =  project(HA,finite_elemet_FS0)
+                        
                     
 
                 temp_obj.rename(nn,'')
                             
                 output_file.write(temp_obj,t[l])
+
+
         
 
         
