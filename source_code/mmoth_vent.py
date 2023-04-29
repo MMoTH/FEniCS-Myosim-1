@@ -200,8 +200,8 @@ def fenics(sim_params):
     f.read(ell,"ellipsoidal/eL")
     f.read(err,"ellipsoidal/eR")
     f.read(ecc,"ellipsoidal/eC")
-    f.read(endo_dist,"ellipsoidal/endo_dist")
-    f.read(epi_dist,"ellipsoidal/epi_dist")
+    f.read(norm_dist_endo,"ellipsoidal/norm_dist_endo")
+    #f.read(epi_dist,"ellipsoidal/epi_dist")
     f.close()
 
 
