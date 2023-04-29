@@ -195,12 +195,12 @@ def fenics(sim_params):
     err = dolfin.Function(fiberFS)
     ecc = dolfin.Function(fiberFS)
     endo_dist = dolfin.Function(Quad)
-    epi_dist = dolfin.Function(Quad)
+    #epi_dist = dolfin.Function(Quad)
 
     f.read(ell,"ellipsoidal/eL")
     f.read(err,"ellipsoidal/eR")
     f.read(ecc,"ellipsoidal/eC")
-    f.read(norm_dist_endo,"ellipsoidal/norm_dist_endo")
+    f.read(endo_dist,"ellipsoidal/norm_dist_endo")
     #f.read(epi_dist,"ellipsoidal/epi_dist")
     f.close()
 
