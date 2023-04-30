@@ -1894,7 +1894,10 @@ def fenics(sim_params):
        
         if l%dumping_freq == 0:
          
-            for nn in ['displacement','hs_length','cb_density','reorienting_angle','c_param','c_param_smooth','fiber_direction']:
+            for nn in ['displacement','cb_density','hs_length','reorienting_angle','c_param','c_param_smooth','fiber_direction','Pk2_total_stress',
+               'endo_distance','err','ecc','ell','TA','HA']:
+        
+            
                 if nn == 'displacement':
                     temp_obj = w.sub(0)
                                 
