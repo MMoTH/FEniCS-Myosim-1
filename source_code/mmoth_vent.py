@@ -925,7 +925,7 @@ def fenics(sim_params):
             temp = np.einsum('ij,ij->i',f0.vector().array().reshape((-1,3)),ell.vector().array().reshape((-1,3)))
             temp2 = np.einsum('ij,ij->i',f0.vector().array().reshape((-1,3)),ecc.vector().array().reshape((-1,3)))
             temp3 = np.einsum('ij,ij->i',f0.vector().array().reshape((-1,3)),err.vector().array().reshape((-1,3)))
-            TA.vector()[:] = (180/np.pi)*np.abs(np.arctan(temp3/temp2))
+            TA.vector()[:] = (180/np.pi)*(np.arctan(temp3/temp2))
             temp_obj =  project(TA,finite_elemet_FS0)
 
 
@@ -936,7 +936,7 @@ def fenics(sim_params):
             temp = np.einsum('ij,ij->i',f0.vector().array().reshape((-1,3)),ell.vector().array().reshape((-1,3)))
             temp2 = np.einsum('ij,ij->i',f0.vector().array().reshape((-1,3)),ecc.vector().array().reshape((-1,3)))
             temp3 = np.einsum('ij,ij->i',f0.vector().array().reshape((-1,3)),err.vector().array().reshape((-1,3)))
-            HA.vector()[:]  = (180/np.pi)*np.abs(np.arctan(temp/temp2))
+            HA.vector()[:]  = (180/np.pi)*(np.arctan(temp/temp2))
             temp_obj =  project(HA,finite_elemet_FS0)
                 
                  
@@ -1994,14 +1994,14 @@ def fenics(sim_params):
                     temp = np.einsum('ij,ij->i',f0.vector().array().reshape((-1,3)),ell.vector().array().reshape((-1,3)))
                     temp2 = np.einsum('ij,ij->i',f0.vector().array().reshape((-1,3)),ecc.vector().array().reshape((-1,3)))
                     temp3 = np.einsum('ij,ij->i',f0.vector().array().reshape((-1,3)),err.vector().array().reshape((-1,3)))
-                    TA.vector()[:] = (180/np.pi)(np.arctan(temp3/temp2))
+                    TA.vector()[:] = (180/np.pi)*(np.arctan(temp3/temp2))
                     temp_obj =  project(TA,finite_elemet_FS0)
 
                 if nn == 'HA':
                     temp = np.einsum('ij,ij->i',f0.vector().array().reshape((-1,3)),ell.vector().array().reshape((-1,3)))
                     temp2 = np.einsum('ij,ij->i',f0.vector().array().reshape((-1,3)),ecc.vector().array().reshape((-1,3)))
                     temp3 = np.einsum('ij,ij->i',f0.vector().array().reshape((-1,3)),err.vector().array().reshape((-1,3)))
-                    HA.vector()[:] = (180/np.pi)(np.arctan(temp/temp2))
+                    HA.vector()[:] = (180/np.pi)*(np.arctan(temp/temp2))
                     temp_obj =  project(HA,finite_elemet_FS0)
                         
                     
