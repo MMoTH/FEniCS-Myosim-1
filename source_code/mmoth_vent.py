@@ -841,12 +841,15 @@ def fenics(sim_params):
     # additional saving params for fiber visual
     scalar_elem =  FiniteElement("DG",mesh.ufl_cell(),1)
     scalar_FS =  FunctionSpace(mesh, scalar_elem)
+    finite_element0 = FiniteElement("DG",mesh.ufl_cell(),0)
+    finite_elemet_FS0 = FunctionSpace(mesh,finite_element0)
+    
     f00 = f0 ## saving initial f0 to find reorientaion in each time step
 
     l_f00 = f00.vector().get_local()[:] 
 
     for nn in ['displacement','cb_density','hs_length','reorienting_angle','c_param','c_param_smooth','fiber_direction','Pk2_total_stress',
-               'endo_distance','err','ecc','ell','TA','HA']:
+               'endo_distance','endo_distance_DG1','endo_distance_CG1','err','ecc','ell','TA','HA']:
         
 
         if nn == 'displacement':
@@ -886,9 +889,9 @@ def fenics(sim_params):
 
         if nn == 'c_param_smooth':
 
-            finite_element00 = FiniteElement("CG",mesh.ufl_cell(),1)
-            finite_elemet_FS00 = FunctionSpace(mesh,finite_element00)
-            temp_obj = project(dolfin_functions["passive_params"]["c"][-1],finite_elemet_FS00)
+            FE_CG1 = FiniteElement("CG",mesh.ufl_cell(),1)
+            FS_CG1 = FunctionSpace(mesh,FE_CG1)
+            temp_obj = project(dolfin_functions["passive_params"]["c"][-1],FS_CG1)
 
 
         if nn == 'fiber_direction':
@@ -905,6 +908,21 @@ def fenics(sim_params):
         if nn == 'endo_distance':
 
             temp_obj =  project(endo_dist,finite_elemet_FS0)
+
+
+        if nn == 'endo_distance_DG1':
+
+
+            FE_DG1 = FiniteElement("DG",mesh.ufl_cell(),1)
+            FS_DG1 = FunctionSpace(mesh,FE_DG1)
+            temp_obj =  project(endo_dist,FS_DG1)
+
+        if nn == 'endo_distance_CG1':
+
+
+            FE_CG1 = FiniteElement("CG",mesh.ufl_cell(),1)
+            FS_CG1 = FunctionSpace(mesh,FE_CG1)
+            temp_obj =  project(endo_dist,FS_CG1)
 
 
         if nn == 'err':
@@ -1895,7 +1913,7 @@ def fenics(sim_params):
         if l%dumping_freq == 0:
          
             for nn in ['displacement','cb_density','hs_length','reorienting_angle','c_param','c_param_smooth','fiber_direction','Pk2_total_stress',
-               'endo_distance','err','ecc','ell','TA','HA']:
+               'endo_distance','endo_distance_DG1','endo_distance_CG1','err','ecc','ell','TA','HA']:
         
             
                 if nn == 'displacement':
@@ -1930,20 +1948,15 @@ def fenics(sim_params):
                         rad = np.arccos(cos) 
                         theta = math.degrees(rad)
                         l_fdiff_ang[ii] = theta
-                        if ii > (no_of_int_points-6):
-                            print ('l_f0_holder',l_f0_holder)
-                            print ('l_f00_holder',l_f00_holder)
-                            print ('cos',cos)
-                            print ('rad',rad)
-                            print ('theta',theta)
+                        
                     
                     fdiff_ang.vector()[:] = l_fdiff_ang
 
 
-                    finite_element_R0 = FiniteElement("DG",mesh.ufl_cell(),1)
-                    finite_elemet_R00 = FunctionSpace(mesh,finite_element_R0)
+                    #finite_element_R0 = FiniteElement("DG",mesh.ufl_cell(),1)
+                    #finite_elemet_R00 = FunctionSpace(mesh,finite_element_R0)
 
-                    temp_obj = project(fdiff_ang,finite_elemet_R00)
+                    temp_obj = project(fdiff_ang,finite_elemet_FS0)
 
                     #fdiff_ang = (180/3.14159)*acos((inner(f0,f00))/(sqrt(inner(f0,f0))*sqrt(inner(f00,f00))))
                            
@@ -1976,6 +1989,18 @@ def fenics(sim_params):
                 if nn == 'endo_distance':
 
                     temp_obj =  project(endo_dist,finite_elemet_FS0)
+                
+                if nn == 'endo_distance_DG1':
+
+                    FE_DG1 = FiniteElement("DG",mesh.ufl_cell(),1)
+                    FS_DG1 = FunctionSpace(mesh,FE_DG1)
+                    temp_obj =  project(endo_dist,FS_DG1)
+
+                if nn == 'endo_distance_CG1':
+
+                    FE_CG1 = FiniteElement("CG",mesh.ufl_cell(),1)
+                    FS_CG1 = FunctionSpace(mesh,FE_CG1)
+                    temp_obj =  project(endo_dist,FS_CG1)
 
                 if nn == 'err':
 
@@ -2057,17 +2082,17 @@ def fenics(sim_params):
                     f0_vs_time_temp2_global = np.reshape(f0_vs_time_temp2_global,(no_of_int_points,3))
                     f0_vs_time_array[:,:,l] = f0_vs_time_temp2_global
 
-                    print('check4')
+                    
                     P_vs_time_temp2_global = np.concatenate(P_vs_time_temp2_global).ravel()
                     P_vs_time_temp2_global = np.reshape(P_vs_time_temp2_global,(no_of_int_points,3))
                     P_vs_time_array[:,:,l] = P_vs_time_temp2_global
-                    print('check5')
+                    
 
 
                     shearfs_vs_time_array[:,l] = shearfs_quad.vector().get_local()[:]
                     shearfn_vs_time_array[:,l] = shearfn_quad.vector().get_local()[:]
 
-                    print('check6')
+                    
 
             if cb_number_density != 0:
                 hsl_temp = project(hsl,FunctionSpace(mesh,'DG',0))
