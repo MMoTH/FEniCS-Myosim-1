@@ -944,7 +944,10 @@ def fenics(sim_params):
             temp2 = np.einsum('ij,ij->i',f0.vector().array().reshape((-1,3)),ecc.vector().array().reshape((-1,3)))
             temp3 = np.einsum('ij,ij->i',f0.vector().array().reshape((-1,3)),err.vector().array().reshape((-1,3)))
             TA.vector()[:] = (180/np.pi)*(np.arctan(temp3/temp2))
-            temp_obj =  project(TA,finite_elemet_FS0)
+
+            FE_DG0 = FiniteElement("DG",mesh.ufl_cell(),0)
+            FS_DG0 = FunctionSpace(mesh,FE_DG0)
+            temp_obj =  project(TA,FS_DG0)
 
 
             
@@ -955,7 +958,9 @@ def fenics(sim_params):
             temp2 = np.einsum('ij,ij->i',f0.vector().array().reshape((-1,3)),ecc.vector().array().reshape((-1,3)))
             temp3 = np.einsum('ij,ij->i',f0.vector().array().reshape((-1,3)),err.vector().array().reshape((-1,3)))
             HA.vector()[:]  = (180/np.pi)*(np.arctan(temp/temp2))
-            temp_obj =  project(HA,finite_elemet_FS0)
+            FE_DG0 = FiniteElement("DG",mesh.ufl_cell(),0)
+            FS_DG0 = FunctionSpace(mesh,FE_DG0)
+            temp_obj =  project(HA,FS_DG0)
                 
                  
 
