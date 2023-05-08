@@ -21,7 +21,7 @@
     "output_path": ["/project/jfwe223_uksr/Mohammad_data/infarct/Finals3/small_infarct_0.2/"],
     "fiber_orientation":{
       "fiber_randomness": [0],
-      "load_fibers": [1, "/home/mme250/FEniCS-Myosim-1/instruction_files/MM_fiber_paper/input_fiber_20cycle/solution.hdf5"]
+      "load_fibers": [1, "/home/mme250/FEniCS-Myosim-1/instruction_files/MM_fiber_paper/input_fiber_2/solution.hdf5"]
     }
   },
 
