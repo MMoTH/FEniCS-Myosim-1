@@ -640,7 +640,8 @@ class Forms(object):
         mesh = self.parameters["mesh"]
         PK2 = stress_tensor
         f0 = self.parameters["fiber"]
-        f = PK2*f0/sqrt(inner(PK2*f0,PK2*f0))
+        f = PK2*f0/sqrt(inner(PK2*f0,PK2*f0)) 
+        wf = sqrt(inner(PK2*f0,PK2*f0))/60000    ## weight factor incorporates the traction vector magnitude in reorientation
 
         f_proj = project(f,VectorFunctionSpace(mesh,"DG",1),form_compiler_parameters={"representation":"uflacs"})
         """for i in range(no_of_int_points):
@@ -664,7 +665,7 @@ class Forms(object):
                 f.vector()[index*3+1] = f0.vector().get_local()[index*3+1]
                 f.vector()[index*3+2] = f0.vector().get_local()[index*3+2]"""
 
-        f_adjusted = 1./kappa * (f_proj - f0) * step_size
+        f_adjusted = 1./kappa * (f_proj - f0) * step_size * wf
         #f_adjusted = 1./kappa * (f-f0) * step_size
         f_adjusted = project(f_adjusted,VectorFunctionSpace(mesh,"DG",1),form_compiler_parameters={"representation":"uflacs"})
         f_adjusted = project(f_adjusted,FunctionSpace)
