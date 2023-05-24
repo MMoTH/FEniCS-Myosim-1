@@ -140,7 +140,7 @@
      "fiber_reorientation":{
        "stress_type":["total"],
        "law":["new_stress_kroon"],
-       "time_constant":[10.0],
+       "time_constant":[200.0],
        "reorient_t_start":[400.0,"ms"]
      }
    }
