@@ -665,8 +665,12 @@ class Forms(object):
                 f.vector()[index*3+1] = f0.vector().get_local()[index*3+1]
                 f.vector()[index*3+2] = f0.vector().get_local()[index*3+2]"""
 
-        f_adjusted = 1./kappa * (f_proj - f0) * step_size * wf
-        #f_adjusted = 1./kappa * (f-f0) * step_size
+        #noteMM: here by incorporating weight factor we can incorporate strength of stress in amount of reorientation
+        #f_adjusted = 1./kappa * (f_proj - f0) * step_size * wf
+
+        ## original FR rule #######################
+        f_adjusted = 1./kappa * (f-f0) * step_size
+
         f_adjusted = project(f_adjusted,VectorFunctionSpace(mesh,"DG",1),form_compiler_parameters={"representation":"uflacs"})
         f_adjusted = project(f_adjusted,FunctionSpace)
 
