@@ -5,26 +5,28 @@ import numpy as np
 #plt.style.use('seaborn')
 
 
-base_dir = 'C:/Users/mme250.AD/OneDrive - University of Kentucky/Cluster_models/'
+base_dir = 'C:/Users/mme250/OneDrive - University of Kentucky/Cluster_models/'
 sim_dir = 'Het_model/Final_time_step0.1/not_het4/'
 
 Num_model = 4
 CS = 2000
 
+plt.rcParams['font.size'] = 16
+
 fig, (ax1)  = plt.subplots(nrows=1,ncols=1)
-ax1.set_xlabel('Volume (mL)',fontsize=13)
-ax1.set_ylabel('LV Pressure (mmHg)',fontsize=13)
+ax1.set_xlabel('Volume (mL)',fontsize=16)
+ax1.set_ylabel('LV Pressure (mmHg)',fontsize=16)
 
 for jj in np.arange(1,Num_model+1):
 
     if jj == 1:
-        pv_file_input= 'C:/Users/mme250.AD/OneDrive - University of Kentucky/Cluster_models/Het_model/Final_time_step0.1/not_het4/PV_.txt'
+        pv_file_input= 'C:/Users/mme250/OneDrive - University of Kentucky/Cluster_models/Het_model/Final_time_step0.1/not_het4/PV_.txt'
     if jj == 2:
-        pv_file_input= 'C:/Users/mme250.AD/OneDrive - University of Kentucky/Cluster_models/Het_model/Final_time_step0.1/het4_0.1fib/PV_.txt'
+        pv_file_input= 'C:/Users/mme250/OneDrive - University of Kentucky/Cluster_models/Het_model/Final_time_step0.1/het4_0.1fib/PV_.txt'
     if jj == 3:
-        pv_file_input= 'C:/Users/mme250.AD/OneDrive - University of Kentucky/Cluster_models/Het_model/Final_time_step0.1/het4_0.2fib/PV_.txt'
+        pv_file_input= 'C:/Users/mme250/OneDrive - University of Kentucky/Cluster_models/Het_model/Final_time_step0.1/het4_0.2fib/PV_.txt'
     if jj == 4:
-        pv_file_input= 'C:/Users/mme250.AD/OneDrive - University of Kentucky/Cluster_models/Het_model/Final_time_step0.1/het4_0.3fib/PV_.txt'
+        pv_file_input= 'C:/Users/mme250/OneDrive - University of Kentucky/Cluster_models/Het_model/Final_time_step0.1/het4_0.3fib/PV_.txt'
     
 
     #pv_file_input = sys.argv[1]
@@ -39,7 +41,7 @@ for jj in np.arange(1,Num_model+1):
 
     #ax1.plot(LV_vol,LV_pressure,)
     #ax1.plot(LV_vol[31:200],LV_pressure[31:200],'*')
-    ax1.plot(LV_vol[-CS:-1],LV_pressure[-CS:-1],)
+    ax1.plot(LV_vol[-CS:-1],LV_pressure[-CS:-1],'-',linewidth=4)
     plt.xlim([0.05, .275])
     plt.ylim([0, 125])
 ax1.legend(['No het','10 percent het','20 percent het','30 percent het'],loc='upper right')
@@ -67,13 +69,13 @@ for jj in np.arange(1,Num_model+1):
     
 
     if jj == 1:
-        pv_file_input= 'C:/Users/mme250.AD/OneDrive - University of Kentucky/Cluster_models/Het_model/Final_time_step0.1/not_het4/PV_.txt'
+        pv_file_input= 'C:/Users/mme250/OneDrive - University of Kentucky/Cluster_models/Het_model/Final_time_step0.1/not_het4/PV_.txt'
     if jj == 2:
-        pv_file_input= 'C:/Users/mme250.AD/OneDrive - University of Kentucky/Cluster_models/Het_model/Final_time_step0.1/het4_0.1fib/PV_.txt'
+        pv_file_input= 'C:/Users/mme250/OneDrive - University of Kentucky/Cluster_models/Het_model/Final_time_step0.1/het4_0.1fib/PV_.txt'
     if jj == 3:
-        pv_file_input= 'C:/Users/mme250.AD/OneDrive - University of Kentucky/Cluster_models/Het_model/Final_time_step0.1/het4_0.2fib/PV_.txt'
+        pv_file_input= 'C:/Users/mme250/OneDrive - University of Kentucky/Cluster_models/Het_model/Final_time_step0.1/het4_0.2fib/PV_.txt'
     if jj == 4:
-        pv_file_input= 'C:/Users/mme250.AD/OneDrive - University of Kentucky/Cluster_models/Het_model/Final_time_step0.1/het4_0.3fib/PV_.txt'
+        pv_file_input= 'C:/Users/mme250/OneDrive - University of Kentucky/Cluster_models/Het_model/Final_time_step0.1/het4_0.3fib/PV_.txt'
     
 
     #pv_file_input = sys.argv[1]
