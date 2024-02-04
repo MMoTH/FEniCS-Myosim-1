@@ -7,8 +7,8 @@
 
 from __future__ import division
 import sys
-sys.path.append("/home/mme250/FEniCS-Myosim-1/dependencies/")
-sys.path.append("/home/mme250/FEniCS-Myosim-1/source_code/")
+sys.path.append("/home/mme250/Infarct_paper/FEniCS-Myosim-1/dependencies/")
+sys.path.append("/home/mme250/Infarct_paper/FEniCS-Myosim-1/source_code/")
 #sys.path.append("/home/fenics/shared/dependencies/")
 #sys.path.append("/home/fenics/shared/source_code/")
 sys.path.append("/C/Users/mme250/OneDrive_-_University_of_Kentucky/Github/Moth_fork_Oct22/FEniCS-Myosim-1-1/dependencies")
