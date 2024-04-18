@@ -669,7 +669,7 @@ class Forms(object):
         #f_adjusted = 1./kappa * (f_proj - f0) * step_size * wf
 
         ## original FR rule #######################
-        f_adjusted = 1./kappa * (f-f0) * step_size
+        f_adjusted = 1./kappa * (f_proj-f0) * step_size
 
         f_adjusted = project(f_adjusted,VectorFunctionSpace(mesh,"DG",1),form_compiler_parameters={"representation":"uflacs"})
         f_adjusted = project(f_adjusted,FunctionSpace)
