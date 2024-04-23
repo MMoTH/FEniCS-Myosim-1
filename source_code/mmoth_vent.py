@@ -2097,6 +2097,7 @@ def fenics(sim_params):
                     shearfs_vs_time_array[:,l] = shearfs_quad.vector().get_local()[:]
                     shearfn_vs_time_array[:,l] = shearfn_quad.vector().get_local()[:]
 
+                
                     
 
             if cb_number_density != 0:
@@ -2200,7 +2201,14 @@ def fenics(sim_params):
 
             y_vec.vector()[:] = y_vec_array # for PDE
 
+        if l%1000 == 0: # save fiber in case of sudden failure
+            print "LAST TIME STEP, SAVE F0_VS_TIME"
+            # save full f0_vs_time
+            File(output_path + "fiber_end.pvd") << project(f0, VectorFunctionSpace(mesh, "DG", 0))
 
+            if 'kroon_time_constant' in locals():
+                print "SAVING F0 VS TIME ARRAY"
+                np.save(output_path+"f0_vs_time.npy",f0_vs_time_array)
 
 
         toc_save_cell = timeit.default_timer() - tic_save_cell
